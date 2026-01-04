@@ -2,13 +2,12 @@ import { html, render } from 'https://esm.sh/lit-html';
 import { moveInstrumentation } from '../../scripts/scripts.js';
 
 /**
- * Helper to extract content columns from a DOM row.
- * Handles the variability in DOM structure between Document-based authoring (flat)
- * and Universal Editor previews (often nested in wrappers).
+ * 从 DOM 行中提取内容列的辅助函数。
+ * 处理基于文档的创作（扁平结构）和通用编辑器预览（通常嵌套在包装器中）之间 DOM 结构的差异。
  */
 function getRowContent(row) {
   let cols = [...row.children];
-  // Check if the row has a single child that is also a container (Universal Editor wrapper)
+  // 检查行是否有单个子元素，且该子元素也是容器（通用编辑器包装器）
   if (cols.length === 1 && cols[0].children.length > 1) {
     return [...cols[0].children];
   }
@@ -16,7 +15,7 @@ function getRowContent(row) {
 }
 
 /**
- * Extracts configuration (block options/styles) from the block wrapper.
+ * 从块包装器中提取配置（块选项/样式）。
  */
 function extractConfig(block) {
   return {
@@ -25,13 +24,13 @@ function extractConfig(block) {
 }
 
 /**
- * Transforms a raw DOM row into a clean data object.
+ * 将原始 DOM 行转换为干净的数据对象。
  */
 function extractItemData(row) {
   const [quoteCol, authorCol, descCol] = getRowContent(row);
 
   return {
-    sourceRow: row, // Reference to the Row (Item) for selection
+    sourceRow: row, // 对行（项）的引用，用于选择
     quote: quoteCol?.innerHTML || '',
     author: authorCol?.innerHTML || '',
     desc: descCol?.innerHTML || ''
@@ -39,7 +38,7 @@ function extractItemData(row) {
 }
 
 /**
- * Generates the HTML template for the entire block using lit-html.
+ * 使用 lit-html 生成整个块的 HTML 模板。
  */
 function renderTemplate(items, config) {
   return html`
@@ -58,8 +57,8 @@ function renderTemplate(items, config) {
 }
 
 /**
- * Applies Universal Editor instrumentation.
- * Standard Behavior: Instrument the Item wrapper only.
+ * 应用通用编辑器的监测。
+ * 标准行为：仅监测项包装器。
  */
 function applyInstrumentation(block, items) {
   const newItems = block.querySelectorAll('.quote-item-wrapper');
@@ -69,14 +68,14 @@ function applyInstrumentation(block, items) {
     const originalItem = items[index];
     
     if (originalItem) {
-      // Standard EDS Pattern: Instrument the Item Wrapper (li or div)
+      // 标准 EDS 模式：监测项包装器（li 或 div）
       moveInstrumentation(originalItem.sourceRow, newItem);
     }
   });
 }
 
 /**
- * Main Decorator Function
+ * 主装饰器函数
  */
 export default function decorate(block) {
   console.log('decorate quotes', block.children);
