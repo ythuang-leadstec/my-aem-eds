@@ -214,5 +214,59 @@
         "valueType": "string"
       }
     ]
+  },
+  {
+    "id": "quotes",
+    "fields": [
+      {
+        "component": "select",
+        "name": "classes",
+        "value": "",
+        "label": "Background Color",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Red",
+            "value": "bg-red"
+          },
+          {
+            "name": "Green",
+            "value": "bg-green"
+          },
+          {
+            "name": "Blue",
+            "value": "bg-blue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "quote",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "quote",
+        "label": "Quote Text",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "author",
+        "label": "Author",
+        "valueType": "string[]",
+        "multi": true
+      },
+      {
+        "component": "text",
+        "name": "desc",
+        "label": "Description",
+        "valueType": "string"
+      }
+    ]
   }
 ]
