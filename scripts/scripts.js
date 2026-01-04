@@ -92,6 +92,8 @@ export function decorateMain(main) {
 async function loadEager(doc) {
   document.documentElement.lang = 'en';
   decorateTemplateAndTheme();
+  //load base CSS
+  loadCSS(`${window.hlx.codeBasePath}/styles/clientlib-common/css/base.css`);
   const main = doc.querySelector('main');
   if (main) {
     decorateMain(main);

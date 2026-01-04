@@ -1,0 +1,23 @@
+
+@import "base/_font-use.less";
+@import "base/_color.less";
+@import "base/_breakpoints.less";
+
+.component-layout {
+    max-width: 1568px;
+    margin: 0 auto;
+    padding: 0 64px;
+    box-sizing: border-box;
+}
+
+@media screen and (max-width: 1024px) {
+    .component-layout {
+        max-width: 1504px;
+        padding: 0 32px;
+    }
+}
+@media screen and (max-width: 768px) {
+    .component-layout {
+        padding: 0 16px;
+    }
+}

@@ -1,0 +1,171 @@
+// out: false
+// 768
+// 769-1024
+// 1025-1439
+// 1440+
+
+@screen-xxl: 1920px;
+@screen-xl: 1439px;
+@screen-lg: 1280px;
+@screen-md: 1024px;
+@screen-sm: 768px;
+
+// 使用示例（Less 中通过传递 detached ruleset）：
+//
+// .selector {
+//   .bp-xl({
+//     /* 在 >=1440px 生效的样式写在这里 */
+//     color: red;
+//   });
+// }
+
+// >1920
+.bp-xxl(@rules) {
+  @media (min-width: (@screen-xxl + 1)) {
+    @rules();
+  }
+}
+
+// >=1440
+.bp-xl(@rules) {  
+  @media (min-width: (@screen-xl + 1)) and (max-width: (@screen-xxl)) {
+    @rules();
+  }
+}
+
+// 1280-1439
+.bp-lg(@rules) {
+  @media (min-width: (@screen-lg + 1)) and (max-width: @screen-xl) {
+    @rules();
+  }
+}
+
+// 1025-1279
+.bp-md(@rules) {
+  @media (min-width: (@screen-md + 1)) and (max-width: @screen-lg) {
+    @rules();
+  }
+}
+
+// 769-1024
+.bp-sm(@rules) {
+  @media (min-width: (@screen-sm + 1)) and (max-width: @screen-md) {
+    @rules();
+  }
+}
+
+// <=768
+.bp-xs(@rules) {
+  @media (max-width: @screen-sm) {
+    @rules();
+  }
+}
+
+// <1920
+.bp-lt-xxl(@rules) {
+  @media (max-width: @screen-xxl) {
+    @rules();
+  }
+}
+// <1440
+.bp-lt-xl(@rules) {
+  @media (max-width: @screen-xl) {
+    @rules();
+  }
+}
+// <1280
+// discard temporarily
+.bp-lt-lg(@rules) {
+  @media (max-width: (@screen-lg)) {
+    @rules();
+  }
+}
+// <=1024
+.bp-lt-md(@rules) {
+  @media (max-width: (@screen-md)) {
+    @rules();
+  }
+}
+// <=768
+.bp-lt-sm(@rules) {
+  @media (max-width: (@screen-sm)) {
+    @rules();
+  }
+}
+
+// >767
+.bp-gt-sm(@rules) {
+  @media (min-width: (@screen-sm + 1)) {
+    @rules();
+  }
+}
+
+
+// Desktop:       >= 1440px
+// Laptop:        1025px - 1439px
+// Tablet:        769px - 1024px
+// Mobile:        <= 768px
+
+// Variables
+@bp-mobile-max: 768px;
+@bp-tablet-min: 769px;
+@bp-tablet-max: 1024px;
+@bp-laptop-min: 1025px;
+@bp-laptop-max: 1439px;
+@bp-desktop-min: 1440px;
+
+// 1. Desktop (>= 1440px)
+.bp-desktop(@rules) {
+  @media (min-width: @bp-desktop-min) {
+    @rules();
+  }
+}
+
+// 2. Laptop (1025px - 1439px)
+.bp-laptop(@rules) {
+  @media (min-width: @bp-laptop-min) and (max-width: @bp-laptop-max) {
+    @rules();
+  }
+}
+
+// 3. Tablet (769px - 1024px)
+.bp-tablet(@rules) {
+  @media (min-width: @bp-tablet-min) and (max-width: @bp-tablet-max) {
+    @rules();
+  }
+}
+
+// 4. Mobile (<= 768px)
+.bp-mobile(@rules) {
+  @media (max-width: @bp-mobile-max) {
+    @rules();
+  }
+}
+
+// Laptop & Below (<= 1439px)
+.bp-laptop-down(@rules) {
+  @media (max-width: @bp-laptop-max) {
+    @rules();
+  }
+}
+
+// Tablet & Below (<= 1024px)
+.bp-tablet-down(@rules) {
+  @media (max-width: @bp-tablet-max) {
+    @rules();
+  }
+}
+
+// Tablet & Desktop & Large (>= 769px)
+.bp-tablet-up(@rules) {
+  @media (min-width: @bp-tablet-min) {
+    @rules();
+  }
+}
+
+// Laptop & Large (>= 1025px)
+.bp-laptop-up(@rules) {
+  @media (min-width: @bp-laptop-min) {
+    @rules();
+  }
+}

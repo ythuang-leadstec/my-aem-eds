@@ -16,7 +16,8 @@
       "cards",
       "columns",
       "fragment",
-      "quotes"
+      "quotes",
+      "img-with-text"
     ]
   },
   {
@@ -41,9 +42,9 @@
     ]
   },
   {
-    "id": "quotes",
+    "id": "img-with-text",
     "components": [
-      "quote"
+      "img-with-text"
     ]
   }
 ]

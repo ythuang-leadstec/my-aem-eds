@@ -1,0 +1,186 @@
+/* 变量定义 */
+.section > .img-with-text-wrapper {
+  max-width: unset;
+  padding: 0;
+}
+/* 基础样式 */
+.cmp__img-with-text {
+  width: 100%;
+  /* 实现左右布局可互换 */
+  /* 图片容器 - 实现定高定宽和等比缩放 */
+  /* 文字内容容器 */
+  /* 实现文字溢出显示省略号 */
+}
+.cmp__img-with-text__container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6.6%;
+  box-sizing: border-box;
+}
+@media (max-width: 1439px) {
+  .cmp__img-with-text__container {
+    gap: 2.5%;
+  }
+}
+@media (max-width: 1024px) {
+  .cmp__img-with-text__container {
+    flex-direction: column;
+    gap: 24px;
+  }
+}
+.cmp__img-with-text--reverse .cmp__img-with-text__container {
+  flex-direction: row-reverse;
+}
+@media (max-width: 1024px) {
+  .cmp__img-with-text--reverse .cmp__img-with-text__container {
+    flex-direction: column;
+  }
+}
+.cmp__img-with-text__image-wrapper {
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  border-radius: 32px;
+  width: 548px;
+  height: 365px;
+  min-height: 365px;
+}
+@media (max-width: 1439px) {
+  .cmp__img-with-text__image-wrapper {
+    width: 490px;
+    height: 327px;
+    min-height: 327px;
+  }
+}
+@media (max-width: 1024px) {
+  .cmp__img-with-text__image-wrapper {
+    width: 100%;
+    height: auto;
+    min-height: auto;
+  }
+}
+.cmp__img-with-text__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+.cmp__img-with-text__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+@media (max-width: 1024px) {
+  .cmp__img-with-text__content {
+    width: 100%;
+  }
+}
+.cmp__img-with-text__title {
+  color: #072b62;
+}
+.cmp__img-with-text__description {
+  margin: 24px 0 0 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 11;
+}
+@media (max-width: 1439px) {
+  .cmp__img-with-text__description {
+    -webkit-line-clamp: 8;
+  }
+}
+@media (max-width: 1024px) {
+  .cmp__img-with-text__description {
+    -webkit-line-clamp: 11;
+  }
+}
+.cmp__img-with-text__button {
+  display: inline-block;
+  padding: 12px 62px;
+  background-color: #37a6d9;
+  color: #FFFFFF;
+  text-decoration: none;
+  align-self: flex-start;
+  border-radius: 6px;
+}
+.cmp__img-with-text__button:any-link {
+  color: #FFFFFF;
+}
+.cmp__img-with-text__button:any-link:hover {
+  text-decoration: none;
+}
+@media (max-width: 768px) {
+  .cmp__img-with-text__button {
+    width: 100%;
+    padding: 12px 0;
+    text-align: center;
+  }
+}
+.cmp__img-with-text__button-wrapper {
+  margin-top: 24px;
+  display: flex;
+  gap: 32px;
+}
+@media (max-width: 1439px) {
+  .cmp__img-with-text__button-wrapper {
+    margin-top: 16px;
+  }
+}
+.cmp__img-with-text__button-wrapper.is-align-left {
+  justify-content: flex-start;
+}
+.cmp__img-with-text__button-wrapper.is-align-center {
+  justify-content: center;
+}
+.cmp__img-with-text__button-wrapper.is-align-right {
+  justify-content: flex-end;
+}
+@media (max-width: 768px) {
+  .cmp__img-with-text__button-wrapper {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+.cmp__img-with-text__text-link-group {
+  margin-top: 16px;
+  display: flex;
+  gap: 32px;
+}
+.cmp__img-with-text__text-link-group.is-align-left {
+  justify-content: flex-start;
+}
+.cmp__img-with-text__text-link-group.is-align-center {
+  justify-content: center;
+}
+.cmp__img-with-text__text-link-group.is-align-right {
+  justify-content: flex-end;
+}
+@media (max-width: 768px) {
+  .cmp__img-with-text__text-link-group {
+    justify-content: space-between !important;
+  }
+}
+.cmp__img-with-text__text-link {
+  color: #009eb8;
+  text-decoration: none;
+}
+.cmp__img-with-text__text-link.is-with-arrow {
+  position: relative;
+  padding-right: 20px;
+}
+.cmp__img-with-text__text-link.is-with-arrow::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  margin-left: 4px;
+  background-image: url("../../../assets/images/icons/link-arrow.svg");
+}
