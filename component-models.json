@@ -190,6 +190,82 @@
     ]
   },
   {
+    "id": "hero-banner",
+    "fields": [
+      {
+        "component": "boolean",
+        "name": "autoplay",
+        "value": false,
+        "label": "Autoplay"
+      }
+    ]
+  },
+  {
+    "id": "banner-item",
+    "fields": [
+      {
+        "component": "tab",
+        "name": "tab-media",
+        "label": "Media"
+      },
+      {
+        "component": "reference",
+        "name": "asset",
+        "label": "Image / Video Asset",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text",
+        "valueType": "string"
+      },
+      {
+        "component": "tab",
+        "name": "tab-content",
+        "label": "Content"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title",
+        "valueType": "string",
+        "multiLine": true
+      },
+      {
+        "component": "text",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string",
+        "multiLine": true
+      },
+      {
+        "component": "text",
+        "name": "ctaLabel",
+        "label": "Button Label",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "ctaLink",
+        "label": "Button Link",
+        "valueType": "string"
+      },
+      {
+        "component": "tab",
+        "name": "tab-navigation",
+        "label": "Navigation"
+      },
+      {
+        "component": "text",
+        "name": "navTitle",
+        "label": "Navigation Title",
+        "valueType": "string",
+        "hint": "Text shown in the bottom navigation bar"
+      }
+    ]
+  },
+  {
     "id": "hero",
     "fields": [
       {

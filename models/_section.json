@@ -52,7 +52,8 @@
         "columns",
         "fragment",
         "quotes",
-        "img-with-text"
+        "img-with-text",
+        "hero-banner"
       ]
     }
   ]

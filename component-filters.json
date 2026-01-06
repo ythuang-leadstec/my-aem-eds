@@ -17,7 +17,8 @@
       "columns",
       "fragment",
       "quotes",
-      "img-with-text"
+      "img-with-text",
+      "hero-banner"
     ]
   },
   {
@@ -39,6 +40,12 @@
       "image",
       "button",
       "title"
+    ]
+  },
+  {
+    "id": "hero-banner",
+    "components": [
+      "banner-item"
     ]
   },
   {
