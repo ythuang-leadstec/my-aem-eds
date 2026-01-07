@@ -2,6 +2,8 @@ import { html, render } from "https://esm.sh/lit-html";
 import { moveInstrumentation } from "../../scripts/scripts.js";
 
 export default function decorate(block) {
+  console.log(block);
+  
   if (!block.children.length) return;
 
   const field = [...block.children].map((row) => row.firstElementChild);
