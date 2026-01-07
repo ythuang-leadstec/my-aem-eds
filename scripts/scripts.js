@@ -10,6 +10,8 @@ import {
   loadSection,
   loadSections,
   loadCSS,
+  decorateBlock,
+  loadBlock,
 } from './aem.js';
 
 /**
@@ -37,6 +39,7 @@ export function moveAttributes(from, to, attributes) {
  * @param {Element} to the element to copy attributes to
  */
 export function moveInstrumentation(from, to) {
+  console.log('[scripts.js] moveInstrumentation called', { from, to });
   moveAttributes(
     from,
     to,
@@ -145,5 +148,18 @@ async function loadPage() {
   await loadLazy(document);
   loadDelayed();
 }
+
+// Universal Editor Event Listener
+document.querySelector('main')?.addEventListener('aue:content-patch', async ({ detail }) => {
+  console.log('[scripts.js] aue:content-patch triggered', detail);
+  const { target, patch } = detail;
+  if (target && patch) {
+    target.replaceWith(patch);
+    if (patch.classList.contains('block')) {
+      decorateBlock(patch);
+      await loadBlock(patch);
+    }
+  }
+});
 
 loadPage();
