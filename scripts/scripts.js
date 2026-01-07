@@ -155,7 +155,8 @@ document.querySelector('main')?.addEventListener('aue:content-patch', async ({ d
   const { target, patch } = detail;
   if (target && patch) {
     target.replaceWith(patch);
-    if (patch.classList.contains('block')) {
+    // Check if the element being replaced was a block (via dataset) or if the new one is marked as a block
+    if (target.dataset.blockName || patch.classList.contains('block')) {
       decorateBlock(patch);
       await loadBlock(patch);
     }
