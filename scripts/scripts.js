@@ -10,8 +10,6 @@ import {
   loadSection,
   loadSections,
   loadCSS,
-  decorateBlock,
-  loadBlock,
 } from './aem.js';
 
 /**
@@ -39,7 +37,6 @@ export function moveAttributes(from, to, attributes) {
  * @param {Element} to the element to copy attributes to
  */
 export function moveInstrumentation(from, to) {
-  console.log('[scripts.js] moveInstrumentation called', { from, to });
   moveAttributes(
     from,
     to,
@@ -95,8 +92,6 @@ export function decorateMain(main) {
 async function loadEager(doc) {
   document.documentElement.lang = 'en';
   decorateTemplateAndTheme();
-  //load base CSS
-  loadCSS(`${window.hlx.codeBasePath}/styles/clientlib-common/css/base.css`);
   const main = doc.querySelector('main');
   if (main) {
     decorateMain(main);
@@ -128,7 +123,8 @@ async function loadLazy(doc) {
 
   loadHeader(doc.querySelector('header'));
   loadFooter(doc.querySelector('footer'));
-
+  //load base CSS
+  loadCSS(`${window.hlx.codeBasePath}/styles/clientlib-common/css/base.css`);
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
 }
@@ -148,19 +144,5 @@ async function loadPage() {
   await loadLazy(document);
   loadDelayed();
 }
-
-// Universal Editor Event Listener
-document.querySelector('main')?.addEventListener('aue:content-patch', async ({ detail }) => {
-  console.log('[scripts.js] aue:content-patch triggered', detail);
-  const { target, patch } = detail;
-  if (target && patch) {
-    target.replaceWith(patch);
-    // Check if the element being replaced was a block (via dataset) or if the new one is marked as a block
-    if (target.dataset.blockName || patch.classList.contains('block')) {
-      decorateBlock(patch);
-      await loadBlock(patch);
-    }
-  }
-});
 
 loadPage();
