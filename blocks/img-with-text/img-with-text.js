@@ -78,7 +78,7 @@ export default function decorate(block) {
       </div>
     </div>
   `;
-  // block.classList.add("cmp__img-with-text");
+  block.classList.add("cmp__img-with-text");
   if (isReverse) {
     block.classList.add("cmp__img-with-text--reverse");
   }

@@ -17,26 +17,14 @@
       "columns",
       "fragment",
       "quotes",
-      "cmp__img-with-text",
-      "cmp__hero-banner"
+      "img-with-text",
+      "hero-banner"
     ]
   },
   {
     "id": "cards",
     "components": [
       "card"
-    ]
-  },
-  {
-    "id": "cmp__hero-banner",
-    "components": [
-      "banner-item"
-    ]
-  },
-  {
-    "id": "cmp__img-with-text",
-    "components": [
-      "cmp__img-with-text"
     ]
   },
   {
@@ -52,6 +40,18 @@
       "image",
       "button",
       "title"
+    ]
+  },
+  {
+    "id": "hero-banner",
+    "components": [
+      "banner-item"
+    ]
+  },
+  {
+    "id": "img-with-text",
+    "components": [
+      "img-with-text"
     ]
   }
 ]

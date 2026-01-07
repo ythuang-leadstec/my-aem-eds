@@ -52,8 +52,8 @@
         "columns",
         "fragment",
         "quotes",
-        "cmp__img-with-text",
-        "cmp__hero-banner"
+        "img-with-text",
+        "hero-banner"
       ]
     }
   ]
