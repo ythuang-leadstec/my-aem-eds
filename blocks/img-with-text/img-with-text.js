@@ -2,12 +2,9 @@ import { html, render } from "https://esm.sh/lit-html";
 import { moveInstrumentation } from "../../scripts/scripts.js";
 
 export default function decorate(block) {
-  console.log('[img-with-text] decorate called', block);
   if (!block.children.length) return;
 
-  // Use block children (rows) directly to access fields
   const field = [...block.children].map((row) => row.firstElementChild);
-  // console.log(field);
 
   const imagePositionClasses =
       field[0]?.textContent?.trim().toLowerCase() || "",
@@ -22,16 +19,6 @@ export default function decorate(block) {
     buttonPosition = field[6]?.textContent || "is-align-left";
 
   const isReverse = alignConfig === "image-right";
-  // console.log(
-  //   imagePositionClasses,
-  //   alignConfig,
-  //   picture,
-  //   title,
-  //   description,
-  //   buttonLayout,
-  //   buttonContentContainer,
-  //   buttonPosition
-  // );
 
   if (picture) {
     const img = picture.querySelector("img");
@@ -99,24 +86,19 @@ export default function decorate(block) {
   block.innerHTML = "";
   render(template, block);
 
-  // Restore Instrumentation for Inline Editing
-  // field[2] corresponds to Title
-  const titleEl = block.querySelector(".cmp__img-with-text__title");
-  if (field[2] && titleEl) {
-    moveInstrumentation(field[2], titleEl);
-  }
+  // Restore Instrumentation for Inline Editing using a mapping array
+  const instrumentationMap = [
+    { index: 1, selector: ".cmp__img-with-text__image-wrapper" },
+    { index: 2, selector: ".cmp__img-with-text__title" },
+    { index: 3, selector: ".cmp__img-with-text__description" },
+  ];
 
-  // field[3] corresponds to Description
-  const descriptionEl = block.querySelector(".cmp__img-with-text__description");
-  if (field[3] && descriptionEl) {
-    moveInstrumentation(field[3], descriptionEl);
-  }
-  
-  // field[1] (Picture) usually retains instrumentation on the picture element if it was passed through, 
-  // or we can move the wrapper's instrumentation if needed.
-  const imageWrapperEl = block.querySelector(".cmp__img-with-text__image-wrapper");
-  if (field[1] && imageWrapperEl) {
-    moveInstrumentation(field[1], imageWrapperEl);
-  }
+  instrumentationMap.forEach(({ index, selector }) => {
+    const source = field[index];
+    const target = block.querySelector(selector);
+    if (source && target) {
+      moveInstrumentation(source, target);
+    }
+  });
 }
 
