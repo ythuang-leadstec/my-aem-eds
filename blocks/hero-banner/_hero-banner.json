@@ -54,14 +54,26 @@
         },
         {
           "component": "reference",
-          "name": "asset",
-          "label": "Image / Video Asset",
+          "name": "assetPc",
+          "label": "Image / Video Asset(PC)",
           "valueType": "string"
         },
         {
           "component": "text",
-          "name": "imageAlt",
-          "label": "Alt Text",
+          "name": "imageAltPc",
+          "label": "Alt Text(PC)",
+          "valueType": "string"
+        },
+        {
+          "component": "reference",
+          "name": "assetMb",
+          "label": "Image / Video Asset(Mobile)",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "imageAltMb",
+          "label": "Alt Text(Mobile)",
           "valueType": "string"
         },
         {
