@@ -18,8 +18,12 @@ function getHeroBannerConfig(block) {
     heroBannerConfigRows[0]?.textContent?.trim().toLowerCase() === "true";
   return { autoplay: autoPlay };
 }
-
-function getBannerItemsConfig(block) {
+/**
+ * get hero banner items configuration from the block children rows
+ * @param {block} block
+ * @returns
+ */
+function getItemsConfig(block) {
   const items = [...block.children].slice(1).map((row) => {
     const cols = [...row.children];
     console.log(row);
@@ -35,21 +39,22 @@ function getBannerItemsConfig(block) {
       if (img) img.classList.add(`mb-banner`);
     }
     return {
-      source: row,
-      imagePc: imageElPc,
-      imageAltPc: cols[1]?.textContent?.trim(),
-      imageMb: imageElMb,
-      imageAltMb: cols[3]?.textContent?.trim(),
-      title: cols[4]?.textContent?.trim(),
-
-      description: cols[5]?.textContent?.trim(),
-      ctaLabel: cols[6]?.textContent?.trim(),
-      ctaLink: cols[7]?.textContent?.trim(),
-      navTitle: cols[8]?.textContent?.trim(),
+      banner: {
+        source: row,
+        imagePc: imageElPc,
+        imageAltPc: cols[1]?.textContent?.trim(),
+        imageMb: imageElMb,
+        imageAltMb: cols[3]?.textContent?.trim(),
+        title: cols[4]?.textContent?.trim(),
+        description: cols[5]?.textContent?.trim(),
+        ctaLabel: cols[6]?.textContent?.trim(),
+        ctaLink: cols[7]?.textContent?.trim(),
+      },
+      thumb: {
+        navTitle: cols[8]?.textContent?.trim(),
+      },
     };
   });
-  console.log(items);
-
   return items;
 }
 
@@ -58,8 +63,8 @@ function getBannerItemsConfig(block) {
  * @param {object} bannerItemConfig
  * @returns
  */
-function bannerTemplate(bannerItemConfig) {
-  return html` <div class="swiper-slide hero-banner__slide">
+function setBannerTemplate(bannerItemConfig) {
+  return html` <div class="swiper-slide cmp__hero-banner__slide">
     <div class="banner__images">
       ${bannerItemConfig.imagePc} ${bannerItemConfig.imageMb}
     </div>
@@ -76,197 +81,255 @@ function bannerTemplate(bannerItemConfig) {
         >
       </div>
     </div>
-    <div class="hero-banner__mask"></div>
+    <div class="cmp__hero-banner__mask"></div>
   </div>`;
 }
-
-function thumbTemplate(bannerItemConfig) {
+/**
+ * thumb item template
+ * @param {object} bannerItemConfig
+ * @returns
+ */
+function setThumbTemplate(bannerItemConfig) {
   return html` <div
-    class="swiper-slide hero-banner__thumb hero-banner__thumb--active"
+    class="swiper-slide cmp__hero-banner__thumb cmp__hero-banner__thumb--active"
   >
     <div class="thumb__content subtitle-1">${bannerItemConfig.navTitle}</div>
   </div>`;
 }
-
-function heroBannerTemplate(bannerTemplate, thumbTemplate, heroBannerConfig) {
+/**
+ * hero banner template
+ * @param {object} bannerItemsConfig
+ * @param {object} heroBannerConfig
+ * @returns
+ */
+function setHeroBannerTemplate(bannerItemsConfig, heroBannerConfig) {
   return html`
-    <div class="hero-banner">
-      <div class="hero-banner__container">
-        <div class="banner-swiper">
-          <div class="swiper-container">
-            <div class="swiper-wrapper">
-              <div class="swiper-actions">
-                <div class="swiper-actions__wrapper component-layout">
-                  <div class="swiper-pagination"></div>
-                  <div class="swiper-button-prev"></div>
-                  <div class="swiper-button-next"></div>
-                </div>
-              </div>
+    <div class="cmp__hero-banner__container">
+      <div class="banner-swiper">
+        <div class="swiper-container">
+          <div class="swiper-wrapper">
+            ${bannerItemsConfig.map((item) => setBannerTemplate(item.banner))}
+          </div>
+          <div class="swiper-actions">
+            <div class="swiper-actions__wrapper component-layout">
+              <div class="swiper-pagination"></div>
+              <div class="swiper-button-prev"></div>
+              <div class="swiper-button-next"></div>
             </div>
+          </div>
+        </div>
+      </div>
+      <div class="thumb-swiper">
+        <div class="swiper-container swiper-container-thumbs">
+          <div class="swiper-wrapper cmp__hero-banner__thumbs">
+            ${bannerItemsConfig.map((item) => setThumbTemplate(item.thumb))}
           </div>
         </div>
       </div>
     </div>
   `;
 }
+
+/**
+ * set hero banner swiper
+ * @param {block} block
+ */
+function setSwiper(block) {
+  loadSwiper().then((Swiper) => {
+    const bannerSwiper = block.querySelector(".banner-swiper");
+    const thumbSwiper = block.querySelector(".thumb-swiper");
+    const bannerSwiperContainer =
+      bannerSwiper.querySelector(".swiper-container");
+    const thumbSwiperContainer = thumbSwiper.querySelector(".swiper-container");
+
+    // 获取thumb slide的数量
+    const thumbSlidesCount =
+      thumbSwiperContainer.querySelectorAll(".swiper-slide").length;
+    const bannerSlidesCount =
+      bannerSwiperContainer.querySelectorAll(".swiper-slide").length;
+
+    let thumbSwiperInstance = null;
+    let bannerSwiperInstance = null;
+
+    // 如果slide数量大于1，才初始化thumb swiper
+    if (thumbSlidesCount > 1) {
+      thumbSwiper.classList.add("thumb-swiper-enabled");
+      const swiperOptions = {
+        loop: false, // thumb不使用loop模式
+        slidesPerView: thumbSlidesCount <= 4 ? thumbSlidesCount : 4,
+        spaceBetween: 24,
+        centeredSlides: false,
+        watchSlidesVisibility: true,
+        allowTouchMove: false, // 禁用手动滑动
+        // 禁用导航按钮和滚动条
+        navigation: false,
+        scrollbar: false,
+      };
+
+      thumbSwiperInstance = new Swiper(thumbSwiperContainer, swiperOptions);
+    }
+
+    if (bannerSlidesCount > 1) {
+      // 初始化banner swiper，移除thumbs选项
+      bannerSwiperInstance = new Swiper(bannerSwiperContainer, {
+        loop: bannerSlidesCount > 1, // 只有当slide数量大于4时才启用循环模式
+        autoplay: {
+          disableOnInteraction: true,
+          delay: 40000,
+        },
+        speed: 1200,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: bannerSwiperContainer.querySelector(".swiper-button-next"),
+          prevEl: bannerSwiperContainer.querySelector(".swiper-button-prev"),
+        },
+        // 添加slideChange事件实现手动联动
+        on: {
+          slideChange: function () {
+            if (thumbSwiperInstance) {
+              // 移除所有thumb slide的active类名
+              Array.from(thumbSwiperInstance.slides).forEach((slide) => {
+                slide.classList.remove("hero-banner__thumb--active");
+              });
+
+              const activeIndex = this.realIndex;
+
+              // 为对应的thumb slide添加active类名
+              if (thumbSwiperInstance.slides[activeIndex]) {
+                thumbSwiperInstance.slides[activeIndex].classList.add(
+                  "hero-banner__thumb--active"
+                );
+              }
+
+              // 当slide数量大于4时，实现滑动窗口逻辑
+              if (bannerSlidesCount > 4) {
+                const currentThumbIndex = thumbSwiperInstance.activeIndex; // thumb当前显示的第一个索引
+                const visibleRange = 4; // 固定显示4个
+
+                // 计算当前可视范围：currentThumbIndex 到 currentThumbIndex + 3
+                const visibleStart = currentThumbIndex;
+                const visibleEnd = currentThumbIndex + visibleRange - 1;
+
+                // 如果activeIndex超出当前可视范围，需要移动thumb
+                if (activeIndex > visibleEnd) {
+                  // 向右移动：移动到activeIndex成为可视范围的最后一个
+                  const newThumbIndex = activeIndex - visibleRange + 1;
+                  thumbSwiperInstance.slideTo(newThumbIndex, 1200);
+                } else if (activeIndex < visibleStart) {
+                  // 向左移动：移动到activeIndex成为可视范围的第一个
+                  thumbSwiperInstance.slideTo(activeIndex, 1200);
+                }
+              }
+            }
+          },
+        },
+      });
+    }
+
+    // 添加thumb swiper的点击事件，实现反向联动
+    if (thumbSwiperInstance && bannerSwiperInstance) {
+      thumbSwiperInstance.on("click", function () {
+        if (thumbSwiperInstance.clickedSlide) {
+          // 获取被点击slide的真实索引
+          Array.from(thumbSwiperInstance.slides).forEach((slide) => {
+            slide.classList.remove("hero-banner__thumb--active");
+          });
+          thumbSwiperInstance.clickedSlide.classList.add(
+            "hero-banner__thumb--active"
+          );
+
+          const clickedIndex = thumbSwiperInstance.clickedIndex;
+
+          if (bannerSwiperInstance.params.loop) {
+            bannerSwiperInstance.slideToLoop(clickedIndex, 1200);
+          } else {
+            bannerSwiperInstance.slideTo(clickedIndex, 1200);
+          }
+        }
+      });
+    } else {
+      // 仅1张banner时，隐藏左右导航按钮
+      const container = bannerSwiperContainer.closest(
+        ".hero-banner__container"
+      );
+      if (container) {
+        container.classList.add("single-banner");
+        const nextBtn = container.querySelector(".swiper-button-next");
+        const prevBtn = container.querySelector(".swiper-button-prev");
+        if (nextBtn) nextBtn.style.display = "none";
+        if (prevBtn) prevBtn.style.display = "none";
+      }
+    }
+  });
+}
 export default async function decorate(block) {
   const heroBannerConfig = getHeroBannerConfig(block);
-  const bannerItemsConfig = getBannerItemsConfig(block);
+  const bannerItemsConfig = getItemsConfig(block);
   console.log(bannerItemsConfig);
-
-  const bannerItemsTemplates = bannerItemsConfig.map((item) =>
-    bannerTemplate(item)
+  const heroBannerTemplate = setHeroBannerTemplate(
+    bannerItemsConfig,
+    heroBannerConfig
   );
-  // 3. Define Template
-  // const template = html`
-  //   <div class="swiper">
-  //     <div class="swiper-wrapper">
-  //       ${items.map(
-  //         (item, index) => html`
-  //           <div class="swiper-slide">
-  //             <div class="${COMPONENT_CLASS}__media">${item.image}</div>
-  //             <div class="${COMPONENT_CLASS}__content">
-  //               <div class="${COMPONENT_CLASS}__text-container">
-  //                 ${item.title
-  //                   ? html`<h2
-  //                       class="${COMPONENT_CLASS}__title"
-  //                       .innerHTML=${item.title}
-  //                     ></h2>`
-  //                   : ""}
-  //                 ${item.description
-  //                   ? html`<p
-  //                       class="${COMPONENT_CLASS}__description"
-  //                       .innerHTML=${item.description}
-  //                     ></p>`
-  //                   : ""}
-  //                 ${item.ctaLabel && item.ctaLink
-  //                   ? html` <a
-  //                       href="${item.ctaLink}"
-  //                       class="${COMPONENT_CLASS}__cta button primary"
-  //                       title="${item.ctaLabel}"
-  //                     >
-  //                       ${item.ctaLabel}
-  //                     </a>`
-  //                   : ""}
-  //               </div>
-  //             </div>
-  //           </div>
-  //         `
-  //       )}
-  //     </div>
 
-  //     <div class="${COMPONENT_CLASS}__navigation">
-  //       <div class="${COMPONENT_CLASS}__pagination custom-pagination">
-  //         ${items.map(
-  //           (item, index) => html`
-  //             <button
-  //               type="button"
-  //               class="${COMPONENT_CLASS}__nav-item"
-  //               data-index="${index}"
-  //             >
-  //               <span class="${COMPONENT_CLASS}__nav-title"
-  //                 >${item.navTitle || `Slide ${index + 1}`}</span
-  //               >
-  //               <span class="${COMPONENT_CLASS}__nav-progress"></span>
-  //             </button>
-  //           `
-  //         )}
-  //       </div>
-  //     </div>
-  //   </div>
-  // `;
-
-  // 4. Render
   block.innerHTML = "";
   block.classList.add(COMPONENT_CLASS);
-  // render(template, block);
+  render(heroBannerTemplate, block);
 
-  // 5. Restore Instrumentation
-  // items.forEach((item, index) => {
-  //   const slide = block.querySelectorAll(".swiper-slide")[index];
-  //   const navItem = block.querySelectorAll(`.${COMPONENT_CLASS}__nav-item`)[
-  //     index
-  //   ];
-  //   // Map source row elements to new DOM elements
-  //   if (item.source) {
-  //     const cols = item.source.children;
-  //     // Image (Col 0) -> Slide Media Wrapper
-  //     if (cols[0])
-  //       moveInstrumentation(
-  //         cols[0],
-  //         slide.querySelector(`.${COMPONENT_CLASS}__media`)
-  //       );
+  // Restore Instrumentation
+  bannerItemsConfig.forEach((item, index) => {
+    // We need to be careful. Let's select specifically from the containers.
+    const bannerSlide = block.querySelectorAll(".banner-swiper .swiper-slide")[
+      index
+    ];
 
-  //     // Title (Col 2) -> h2
-  //     if (cols[2] && slide.querySelector(`.${COMPONENT_CLASS}__title`)) {
-  //       moveInstrumentation(
-  //         cols[2],
-  //         slide.querySelector(`.${COMPONENT_CLASS}__title`)
-  //       );
-  //     }
+    if (item.banner.source && bannerSlide) {
+      moveInstrumentation(item.banner.source, bannerSlide);
 
-  //     // Description (Col 3) -> p
-  //     if (cols[3] && slide.querySelector(`.${COMPONENT_CLASS}__description`)) {
-  //       moveInstrumentation(
-  //         cols[3],
-  //         slide.querySelector(`.${COMPONENT_CLASS}__description`)
-  //       );
-  //     }
+      const imageContainer = bannerSlide.querySelector(".banner__images");
 
-  //     // CTA (Col 4) -> a (Button)
-  //     if (cols[4] && slide.querySelector(`.${COMPONENT_CLASS}__cta`)) {
-  //       moveInstrumentation(
-  //         cols[4],
-  //         slide.querySelector(`.${COMPONENT_CLASS}__cta`)
-  //       );
-  //     }
+      if (item.banner.imagePc) {
+        const cols = item.banner.source.children;
 
-  //     // Nav Title (Col 6) -> Nav Item Button Title
-  //     if (cols[6] && navItem) {
-  //       moveInstrumentation(
-  //         cols[6],
-  //         navItem.querySelector(`.${COMPONENT_CLASS}__nav-title`)
-  //       );
-  //     }
-  //   }
-  // });
+        if (cols[0])
+          moveInstrumentation(
+            cols[0],
+            bannerSlide.querySelector(".pc-banner")?.closest("picture") ||
+              bannerSlide.querySelector(".banner__images")
+          );
+        if (cols[2])
+          moveInstrumentation(
+            cols[2],
+            bannerSlide.querySelector(".mb-banner")?.closest("picture") ||
+              bannerSlide.querySelector(".banner__images")
+          );
 
-  // 6. Initialize Swiper
-  // const Swiper = await loadSwiper();
-  // if (Swiper) {
-  //   new Swiper(block.querySelector(".swiper"), {
-  //     slidesPerView: 1,
-  //     loop: items.length > 1,
-  //     autoplay: autoplay
-  //       ? {
-  //           delay: 5000,
-  //           disableOnInteraction: false,
-  //         }
-  //       : false,
-  //     effect: "fade",
-  //     fadeEffect: {
-  //       crossFade: true,
-  //     },
-  //     on: {
-  //       init: function (swiper) {
-  //         const buttons = block.querySelectorAll(
-  //           `.${COMPONENT_CLASS}__nav-item`
-  //         );
-  //         buttons.forEach((btn, idx) => {
-  //           btn.addEventListener("click", () => {
-  //             swiper.slideToLoop(idx);
-  //           });
-  //         });
+        // Title (Col 4)
+        if (cols[4])
+          moveInstrumentation(
+            cols[4],
+            bannerSlide.querySelector(".banner__title")
+          );
 
-  //         const updateActive = () => {
-  //           buttons.forEach((b) => b.classList.remove("active"));
-  //           if (buttons[swiper.realIndex])
-  //             buttons[swiper.realIndex].classList.add("active");
-  //         };
-  //         swiper.on("slideChange", updateActive);
-  //         updateActive();
-  //       },
-  //     },
-  //   });
-  // }
+        // Description (Col 5)
+        if (cols[5])
+          moveInstrumentation(
+            cols[5],
+            bannerSlide.querySelector(".banner__subtitle")
+          );
+
+        // CTA Label (Col 6) / Link (Col 7)
+        // Usually put on the button anchor
+        if (cols[6])
+          moveInstrumentation(
+            cols[6],
+            bannerSlide.querySelector(".banner__btn")
+          );
+      }
+    }
+  });
+
+  setSwiper(block);
 }
