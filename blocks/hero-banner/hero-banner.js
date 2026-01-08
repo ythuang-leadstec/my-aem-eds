@@ -172,7 +172,7 @@ function setSwiper(block) {
     if (bannerSlidesCount > 1) {
       // 初始化banner swiper，移除thumbs选项
       bannerSwiperInstance = new Swiper(bannerSwiperContainer, {
-        loop: bannerSlidesCount > 1, // 只有当slide数量大于4时才启用循环模式
+        loop: bannerSlidesCount > 1,
         autoplay: {
           disableOnInteraction: true,
           delay: 40000,
@@ -192,7 +192,7 @@ function setSwiper(block) {
             if (thumbSwiperInstance) {
               // 移除所有thumb slide的active类名
               Array.from(thumbSwiperInstance.slides).forEach((slide) => {
-                slide.classList.remove("hero-banner__thumb--active");
+                slide.classList.remove("cmp__hero-banner__thumb--active");
               });
 
               const activeIndex = this.realIndex;
@@ -200,7 +200,7 @@ function setSwiper(block) {
               // 为对应的thumb slide添加active类名
               if (thumbSwiperInstance.slides[activeIndex]) {
                 thumbSwiperInstance.slides[activeIndex].classList.add(
-                  "hero-banner__thumb--active"
+                  "cmp__hero-banner__thumb--active"
                 );
               }
 
@@ -235,10 +235,10 @@ function setSwiper(block) {
         if (thumbSwiperInstance.clickedSlide) {
           // 获取被点击slide的真实索引
           Array.from(thumbSwiperInstance.slides).forEach((slide) => {
-            slide.classList.remove("hero-banner__thumb--active");
+            slide.classList.remove("cmp__hero-banner__thumb--active");
           });
           thumbSwiperInstance.clickedSlide.classList.add(
-            "hero-banner__thumb--active"
+            "cmp__hero-banner__thumb--active"
           );
 
           const clickedIndex = thumbSwiperInstance.clickedIndex;
@@ -253,7 +253,7 @@ function setSwiper(block) {
     } else {
       // 仅1张banner时，隐藏左右导航按钮
       const container = bannerSwiperContainer.closest(
-        ".hero-banner__container"
+        ".cmp__hero-banner__container"
       );
       if (container) {
         container.classList.add("single-banner");
@@ -278,16 +278,18 @@ export default async function decorate(block) {
   block.classList.add(COMPONENT_CLASS);
   render(heroBannerTemplate, block);
 
+  // Initialize Swiper first (so duplicates are created without instrumentation)
+  setSwiper(block);
+
   // Restore Instrumentation
   bannerItemsConfig.forEach((item, index) => {
-    // We need to be careful. Let's select specifically from the containers.
-    const bannerSlide = block.querySelectorAll(".banner-swiper .swiper-slide")[
-      index
-    ];
+    // loop产生的duplicate slide不清理会影响编辑器的子树结构,虽然在loop里面是虚拟的,但是编辑器会识别到
+    const bannerSlide = block.querySelectorAll(
+      ".banner-swiper .swiper-slide:not(.swiper-slide-duplicate)"
+    )[index];
 
     if (item.banner.source && bannerSlide) {
       moveInstrumentation(item.banner.source, bannerSlide);
-
       const imageContainer = bannerSlide.querySelector(".banner__images");
 
       if (item.banner.imagePc) {
@@ -330,6 +332,4 @@ export default async function decorate(block) {
       }
     }
   });
-
-  setSwiper(block);
 }
