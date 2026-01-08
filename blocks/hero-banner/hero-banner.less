@@ -46,12 +46,31 @@ body {
       }
     }
     .banner {
-      &__images {
+      // Shared styles for media containers
+      &__images,
+      &__video {
         position: absolute;
         width: 100%;
         height: 100%;
         overflow: hidden;
+        top: 0;
+        left: 0;
 
+        .mb-banner {
+          display: none;
+        }
+
+        .bp-mobile({
+          .pc-banner {
+            display: none;
+          }
+          .mb-banner {
+            display: block;
+          }
+        });
+      }
+
+      &__images {
         picture {
           display: block;
           width: 100%;
@@ -65,9 +84,13 @@ body {
           transform: scale(1);
           transition: transform 10s ease-out;
         }
+      }
 
-        .mb-banner {
-          display: none;
+      &__video {
+        video {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
         }
       }
 
@@ -75,12 +98,14 @@ body {
         box-sizing: border-box;
         width: 100%;
         height: 100%;
+        pointer-events: none; // Allow clicks to pass through to background
         &__wrapper {
           position: absolute;
           transform: translateY(-50%);
           top: calc(50% - 64px);
           z-index: 2;
           max-width: 50%;
+          pointer-events: auto; // Restore clicks for content
 
           .bp-tablet({
             transform: translateY(-50%);
@@ -223,7 +248,7 @@ body {
     // flex-grow: 1;
     cursor: pointer;
     // min-height: 88px;
-    height: auto;
+    height: auto !important;
 
     .thumb__content {
       color: @rt-dark-400;

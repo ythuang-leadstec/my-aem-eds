@@ -25,27 +25,47 @@ function getHeroBannerConfig(block) {
  */
 function getItemsConfig(block) {
   console.log(block);
-  
+
   const items = [...block.children].slice(1).map((row) => {
     const cols = [...row.children];
 
     const imageElPc = cols[0]?.querySelector("picture");
+    let videoLinkPc = null,
+      videoLinkMb = null,
+      isImgAsset = false;
     if (imageElPc) {
       const img = imageElPc.querySelector("img");
       if (img) img.classList.add(`pc-banner`);
+      isImgAsset = true;
+    } else {
+      videoLinkPc = cols[0]?.querySelector("a")?.getAttribute("href");
     }
-    const imageElMb = cols[2]?.querySelector("picture");
+    let imageElMb = cols[2]?.querySelector("picture");
     if (imageElMb) {
       const img = imageElMb.querySelector("img");
       if (img) img.classList.add(`mb-banner`);
+    } else if (imageElPc) {
+      imageElMb = imageElPc.cloneNode(true);
+      const img = imageElMb.querySelector("img");
+      if (img) img.classList.remove("pc-banner");
+      if (img) img.classList.add("mb-banner");
+    } else {
+      // Logic: If mobile video link exists, use it; otherwise fallback to PC video link
+      const specificMbLink = cols[2]?.querySelector("a")?.getAttribute("href");
+      videoLinkMb = specificMbLink ? specificMbLink : videoLinkPc;
     }
     return {
       banner: {
         source: row,
-        imagePc: imageElPc,
-        imageAltPc: cols[1]?.textContent?.trim(),
-        imageMb: imageElMb,
-        imageAltMb: cols[3]?.textContent?.trim(),
+        assets: {
+          isImgAsset: isImgAsset,
+          imagePc: imageElPc,
+          imageAltPc: cols[1]?.textContent?.trim(),
+          imageMb: imageElMb,
+          imageAltMb: cols[3]?.textContent?.trim(),
+          videoLinkPc: videoLinkPc,
+          videoLinkMb: videoLinkMb,
+        },
         title: cols[4]?.textContent?.trim(),
         description: cols[5]?.textContent?.trim(),
         ctaLabel: cols[6]?.textContent?.trim(),
@@ -60,15 +80,34 @@ function getItemsConfig(block) {
 }
 
 /**
+ * set asset template
+ * @param {object} assetConfig 
+ * @returns 
+ */
+function setAssetTemplate(assetConfig) {
+  if (assetConfig.isImgAsset) {
+    return html`
+    <div class="banner__images">
+      ${assetConfig.imagePc} ${assetConfig.imageMb}
+    </div>
+    `;
+  } else {
+    return html`
+    <div class="banner__video">
+        <video src="${assetConfig.videoLinkPc}" class="pc-banner" autoplay muted loop></video>
+        <video src="${assetConfig.videoLinkMb}" class="mb-banner" autoplay muted loop></video>
+    </div>
+    `;
+  }
+}
+/**
  * banner item template
  * @param {object} bannerItemConfig
  * @returns
  */
 function setBannerTemplate(bannerItemConfig) {
   return html` <div class="swiper-slide cmp__hero-banner__slide">
-    <div class="banner__images">
-      ${bannerItemConfig.imagePc} ${bannerItemConfig.imageMb}
-    </div>
+    ${setAssetTemplate(bannerItemConfig.assets)}
     <div class="banner__content component-layout">
       <div class="banner__content__wrapper">
         <div class="banner__box">
@@ -85,14 +124,16 @@ function setBannerTemplate(bannerItemConfig) {
     <div class="cmp__hero-banner__mask"></div>
   </div>`;
 }
+
 /**
  * thumb item template
  * @param {object} bannerItemConfig
+ * @param {number} index
  * @returns
  */
-function setThumbTemplate(bannerItemConfig) {
+function setThumbTemplate(bannerItemConfig, index) {
   return html` <div
-    class="swiper-slide cmp__hero-banner__thumb cmp__hero-banner__thumb--active"
+    class="swiper-slide cmp__hero-banner__thumb ${index === 0 ? "cmp__hero-banner__thumb--active" : ""}"
   >
     <div class="thumb__content subtitle-1">${bannerItemConfig.navTitle}</div>
   </div>`;
@@ -124,7 +165,7 @@ function setHeroBannerTemplate(bannerItemsConfig, heroBannerConfig) {
         <div class="thumb-swiper__wrapper component-layout">
           <div class="swiper-container swiper-container-thumbs">
             <div class="swiper-wrapper hero-banner__thumbs">
-              ${bannerItemsConfig.map((item) => setThumbTemplate(item.thumb))}
+              ${bannerItemsConfig.map((item, index) => setThumbTemplate(item.thumb, index))}
             </div>
           </div>
         </div>
@@ -291,11 +332,10 @@ function setSwiper(block) {
   });
 }
 export default async function decorate(block) {
-
   const heroBannerConfig = getHeroBannerConfig(block);
   const bannerItemsConfig = getItemsConfig(block);
   // console.log(bannerItemsConfig);
-  
+
   // console.log(block);
   const heroBannerTemplate = setHeroBannerTemplate(
     bannerItemsConfig,
@@ -317,22 +357,33 @@ export default async function decorate(block) {
       moveInstrumentation(item.banner.source, bannerSlide);
       const imageContainer = bannerSlide.querySelector(".banner__images");
 
-      if (item.banner.imagePc) {
-        const cols = item.banner.source.children;
-
-        if (cols[0])
-          moveInstrumentation(
-            cols[0],
+      const cols = item.banner.source.children;
+      if (cols.length) {
+        // Asset PC (Col 0) - Image or Video
+        console.log(cols[0]);
+        
+        if (cols[0]) {
+          const target =
             bannerSlide.querySelector(".pc-banner")?.closest("picture") ||
-              bannerSlide.querySelector(".banner__images")
-          );
-        if (cols[2])
-          moveInstrumentation(
-            cols[2],
-            bannerSlide.querySelector(".mb-banner")?.closest("picture") ||
-              bannerSlide.querySelector(".banner__images")
-          );
+            bannerSlide.querySelector("video.pc-banner") ||
+            imageContainer ||
+            bannerSlide.querySelector(".banner__video");
+          moveInstrumentation(cols[0], target);
+        }
 
+        // Asset MB (Col 2) - Image or Video
+        if (cols[2]) {
+          const target =
+            bannerSlide.querySelector(".mb-banner")?.closest("picture") ||
+            bannerSlide.querySelector("video.mb-banner") ||
+            imageContainer ||
+            bannerSlide.querySelector(".banner__video");
+          moveInstrumentation(cols[2], target);
+        }
+
+        console.log(cols[4]);
+        console.log(bannerSlide.querySelector(".banner__title"));
+        
         // Title (Col 4)
         if (cols[4])
           moveInstrumentation(
@@ -340,6 +391,8 @@ export default async function decorate(block) {
             bannerSlide.querySelector(".banner__title")
           );
 
+          console.log(cols[5]);
+          console.log(bannerSlide.querySelector(".banner__subtitle"));
         // Description (Col 5)
         if (cols[5])
           moveInstrumentation(
@@ -347,6 +400,8 @@ export default async function decorate(block) {
             bannerSlide.querySelector(".banner__subtitle")
           );
 
+          console.log(cols[6]);
+          console.log(bannerSlide.querySelector(".banner__btn"));
         // CTA Label (Col 6) / Link (Col 7)
         // Usually put on the button anchor
         if (cols[6])
