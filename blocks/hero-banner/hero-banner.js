@@ -188,6 +188,28 @@ function setSwiper(block) {
         },
         // 添加slideChange事件实现手动联动
         on: {
+          init: function () {
+            // Clean up AUE attributes from duplicated slides to prevent editor confusion
+            // This is necessary because Swiper clones the DOM elements including their attributes
+            const duplicates = this.el.querySelectorAll(
+              ".swiper-slide-duplicate"
+            );
+            duplicates.forEach((slide) => {
+              [...slide.attributes].forEach((attr) => {
+                if (attr.name.startsWith("data-aue-")) {
+                  slide.removeAttribute(attr.name);
+                }
+              });
+              // Also clean children
+              slide.querySelectorAll("*").forEach((child) => {
+                [...child.attributes].forEach((attr) => {
+                  if (attr.name.startsWith("data-aue-")) {
+                    child.removeAttribute(attr.name);
+                  }
+                });
+              });
+            });
+          },
           slideChange: function () {
             if (thumbSwiperInstance) {
               // 移除所有thumb slide的active类名
@@ -278,15 +300,12 @@ export default async function decorate(block) {
   block.classList.add(COMPONENT_CLASS);
   render(heroBannerTemplate, block);
 
-  // Initialize Swiper first (so duplicates are created without instrumentation)
-  setSwiper(block);
-
   // Restore Instrumentation
   bannerItemsConfig.forEach((item, index) => {
-    // loop产生的duplicate slide不清理会影响编辑器的子树结构,虽然在loop里面是虚拟的,但是编辑器会识别到
-    const bannerSlide = block.querySelectorAll(
-      ".banner-swiper .swiper-slide:not(.swiper-slide-duplicate)"
-    )[index];
+    // We need to be careful. Let's select specifically from the containers.
+    const bannerSlide = block.querySelectorAll(".banner-swiper .swiper-slide")[
+      index
+    ];
 
     if (item.banner.source && bannerSlide) {
       moveInstrumentation(item.banner.source, bannerSlide);
@@ -332,4 +351,6 @@ export default async function decorate(block) {
       }
     }
   });
+
+  setSwiper(block);
 }
