@@ -404,5 +404,22 @@
         ]
       }
     ]
+  },
+  {
+    "id": "support-tool-item",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "icon",
+        "label": "Icon",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "text",
+        "label": "Text",
+        "valueType": "string"
+      }
+    ]
   }
 ]

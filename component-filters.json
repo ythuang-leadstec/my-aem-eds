@@ -18,7 +18,8 @@
       "fragment",
       "quotes",
       "img-with-text",
-      "hero-banner"
+      "hero-banner",
+      "support-tools"
     ]
   },
   {
@@ -52,6 +53,12 @@
     "id": "img-with-text",
     "components": [
       "img-with-text"
+    ]
+  },
+  {
+    "id": "support-tools",
+    "components": [
+      "support-tool-item"
     ]
   }
 ]
