@@ -24,9 +24,10 @@ function getHeroBannerConfig(block) {
  * @returns
  */
 function getItemsConfig(block) {
+  console.log(block);
+  
   const items = [...block.children].slice(1).map((row) => {
     const cols = [...row.children];
-    console.log(row);
 
     const imageElPc = cols[0]?.querySelector("picture");
     if (imageElPc) {
@@ -120,9 +121,11 @@ function setHeroBannerTemplate(bannerItemsConfig, heroBannerConfig) {
         </div>
       </div>
       <div class="thumb-swiper">
-        <div class="swiper-container swiper-container-thumbs">
-          <div class="swiper-wrapper cmp__hero-banner__thumbs">
-            ${bannerItemsConfig.map((item) => setThumbTemplate(item.thumb))}
+        <div class="thumb-swiper__wrapper component-layout">
+          <div class="swiper-container swiper-container-thumbs">
+            <div class="swiper-wrapper hero-banner__thumbs">
+              ${bannerItemsConfig.map((item) => setThumbTemplate(item.thumb))}
+            </div>
           </div>
         </div>
       </div>
@@ -288,9 +291,12 @@ function setSwiper(block) {
   });
 }
 export default async function decorate(block) {
+
   const heroBannerConfig = getHeroBannerConfig(block);
   const bannerItemsConfig = getItemsConfig(block);
-  console.log(bannerItemsConfig);
+  // console.log(bannerItemsConfig);
+  
+  // console.log(block);
   const heroBannerTemplate = setHeroBannerTemplate(
     bannerItemsConfig,
     heroBannerConfig
