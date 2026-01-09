@@ -1,3 +1,7 @@
+.section > .support-tools-wrapper {
+  max-width: unset;
+  padding: 0;
+}
 .cmp__support-tools {
   margin: 0 32px;
 }
@@ -48,9 +52,11 @@
   text-decoration: none;
   padding: 16px 29px;
   box-sizing: border-box;
+  height: 100%;
 }
 .cmp__support-tools__item:hover {
   background-color: #F5F6F8;
+  text-decoration: none;
 }
 @media (max-width: 1024px) {
   .cmp__support-tools__item {
