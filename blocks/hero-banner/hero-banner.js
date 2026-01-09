@@ -164,7 +164,7 @@ function setHeroBannerTemplate(bannerItemsConfig, heroBannerConfig) {
       <div class="thumb-swiper">
         <div class="thumb-swiper__wrapper component-layout">
           <div class="swiper-container swiper-container-thumbs">
-            <div class="swiper-wrapper hero-banner__thumbs">
+            <div class="swiper-wrapper cmp__hero-banner__thumbs">
               ${bannerItemsConfig.map((item, index) => setThumbTemplate(item.thumb, index))}
             </div>
           </div>
@@ -334,9 +334,7 @@ function setSwiper(block) {
 export default async function decorate(block) {
   const heroBannerConfig = getHeroBannerConfig(block);
   const bannerItemsConfig = getItemsConfig(block);
-  // console.log(bannerItemsConfig);
 
-  // console.log(block);
   const heroBannerTemplate = setHeroBannerTemplate(
     bannerItemsConfig,
     heroBannerConfig
@@ -348,10 +346,7 @@ export default async function decorate(block) {
 
   // Restore Instrumentation
   bannerItemsConfig.forEach((item, index) => {
-    // We need to be careful. Let's select specifically from the containers.
-    const bannerSlide = block.querySelectorAll(".banner-swiper .swiper-slide")[
-      index
-    ];
+    const bannerSlide = block.querySelectorAll(".banner-swiper .swiper-slide")[index];
 
     if (item.banner.source && bannerSlide) {
       moveInstrumentation(item.banner.source, bannerSlide);
@@ -359,8 +354,6 @@ export default async function decorate(block) {
 
       const cols = item.banner.source.children;
       if (cols.length) {
-        // Asset PC (Col 0) - Image or Video
-        console.log(cols[0]);
         
         if (cols[0]) {
           const target =
@@ -371,7 +364,6 @@ export default async function decorate(block) {
           moveInstrumentation(cols[0], target);
         }
 
-        // Asset MB (Col 2) - Image or Video
         if (cols[2]) {
           const target =
             bannerSlide.querySelector(".mb-banner")?.closest("picture") ||
@@ -381,29 +373,18 @@ export default async function decorate(block) {
           moveInstrumentation(cols[2], target);
         }
 
-        console.log(cols[4]);
-        console.log(bannerSlide.querySelector(".banner__title"));
-        
-        // Title (Col 4)
         if (cols[4])
           moveInstrumentation(
             cols[4],
             bannerSlide.querySelector(".banner__title")
           );
 
-          console.log(cols[5]);
-          console.log(bannerSlide.querySelector(".banner__subtitle"));
-        // Description (Col 5)
         if (cols[5])
           moveInstrumentation(
             cols[5],
             bannerSlide.querySelector(".banner__subtitle")
           );
 
-          console.log(cols[6]);
-          console.log(bannerSlide.querySelector(".banner__btn"));
-        // CTA Label (Col 6) / Link (Col 7)
-        // Usually put on the button anchor
         if (cols[6])
           moveInstrumentation(
             cols[6],
