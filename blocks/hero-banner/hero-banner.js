@@ -57,6 +57,13 @@ function getItemsConfig(block) {
     return {
       banner: {
         source: row,
+        sources: {
+          assetPc: cols[0],
+          assetMb: cols[2], 
+          title: cols[4],
+          description: cols[5],
+          cta: cols[6]
+        },
         assets: {
           isImgAsset: isImgAsset,
           imagePc: imageElPc,
@@ -332,6 +339,8 @@ function setSwiper(block) {
   });
 }
 export default async function decorate(block) {
+  console.log(block.outerHTML);
+  
   const heroBannerConfig = getHeroBannerConfig(block);
   const bannerItemsConfig = getItemsConfig(block);
 
@@ -345,49 +354,49 @@ export default async function decorate(block) {
   render(heroBannerTemplate, block);
 
   // Restore Instrumentation
+  const bannerSlides = block.querySelectorAll(".banner-swiper .swiper-slide");
+
   bannerItemsConfig.forEach((item, index) => {
-    const bannerSlide = block.querySelectorAll(".banner-swiper .swiper-slide")[index];
+    const bannerSlide = bannerSlides[index];
 
     if (item.banner.source && bannerSlide) {
       moveInstrumentation(item.banner.source, bannerSlide);
       const imageContainer = bannerSlide.querySelector(".banner__images");
+      const videoContainer = bannerSlide.querySelector(".banner__video");
+      const sources = item.banner.sources;
 
-      const cols = item.banner.source.children;
-      if (cols.length) {
-        
-        if (cols[0]) {
-          const target =
+      if (sources) {
+        if (sources.assetPc) {
+           const target =
             bannerSlide.querySelector(".pc-banner")?.closest("picture") ||
             bannerSlide.querySelector("video.pc-banner") ||
-            imageContainer ||
-            bannerSlide.querySelector(".banner__video");
-          moveInstrumentation(cols[0], target);
+            imageContainer || videoContainer;
+           moveInstrumentation(sources.assetPc, target);
         }
 
-        if (cols[2]) {
-          const target =
+        if (sources.assetMb) {
+           const target =
             bannerSlide.querySelector(".mb-banner")?.closest("picture") ||
             bannerSlide.querySelector("video.mb-banner") ||
-            imageContainer ||
-            bannerSlide.querySelector(".banner__video");
-          moveInstrumentation(cols[2], target);
+            imageContainer || videoContainer;
+           moveInstrumentation(sources.assetMb, target);
         }
 
-        if (cols[4])
+        if (sources.title)
           moveInstrumentation(
-            cols[4],
+            sources.title,
             bannerSlide.querySelector(".banner__title")
           );
 
-        if (cols[5])
+        if (sources.description)
           moveInstrumentation(
-            cols[5],
+            sources.description,
             bannerSlide.querySelector(".banner__subtitle")
           );
 
-        if (cols[6])
+        if (sources.cta)
           moveInstrumentation(
-            cols[6],
+            sources.cta,
             bannerSlide.querySelector(".banner__btn")
           );
       }
