@@ -24,7 +24,6 @@ function getHeroBannerConfig(block) {
  * @returns
  */
 function getItemsConfig(block) {
-  console.log(block);
 
   const items = [...block.children].slice(1).map((row) => {
     const cols = [...row.children];
@@ -50,13 +49,20 @@ function getItemsConfig(block) {
       if (img) img.classList.remove("pc-banner");
       if (img) img.classList.add("mb-banner");
     } else {
-      // Logic: If mobile video link exists, use it; otherwise fallback to PC video link
       const specificMbLink = cols[2]?.querySelector("a")?.getAttribute("href");
       videoLinkMb = specificMbLink ? specificMbLink : videoLinkPc;
     }
+    
     return {
       banner: {
         source: row,
+        sources: {
+          assetPc: cols[0],
+          assetMb: cols[2], 
+          title: cols[4],
+          description: cols[5],
+          btn: cols[6]
+        },
         assets: {
           isImgAsset: isImgAsset,
           imagePc: imageElPc,
@@ -68,10 +74,14 @@ function getItemsConfig(block) {
         },
         title: cols[4]?.textContent?.trim(),
         description: cols[5]?.textContent?.trim(),
-        ctaLabel: cols[6]?.textContent?.trim(),
-        ctaLink: cols[7]?.textContent?.trim(),
+        btnLabel: cols[6]?.textContent?.trim(),
+        btnLink: cols[7]?.textContent?.trim(),
       },
       thumb: {
+        source: row,
+        sources: {
+          navTitle: cols[8],
+        },
         navTitle: cols[8]?.textContent?.trim(),
       },
     };
@@ -111,14 +121,12 @@ function setBannerTemplate(bannerItemConfig) {
     <div class="banner__content component-layout">
       <div class="banner__content__wrapper">
         <div class="banner__box">
-          <div class="banner__title headline-2">${bannerItemConfig.title}</div>
-          <div class="banner__subtitle headline-4">
-            ${bannerItemConfig.description}
+          <div class="banner__title headline-2" .innerHTML=${bannerItemConfig.title}></div>
+          <div class="banner__subtitle headline-4" .innerHTML=${bannerItemConfig.description}>
           </div>
         </div>
-        <a href="${bannerItemConfig.ctaLink}" class="banner__btn body-1"
-          >${bannerItemConfig.ctaLabel}</a
-        >
+        <a href="${bannerItemConfig.btnLink}" class="banner__btn body-1" .innerHTML=${bannerItemConfig.btnLabel}>
+        </a>
       </div>
     </div>
     <div class="cmp__hero-banner__mask"></div>
@@ -135,7 +143,7 @@ function setThumbTemplate(bannerItemConfig, index) {
   return html` <div
     class="swiper-slide cmp__hero-banner__thumb ${index === 0 ? "cmp__hero-banner__thumb--active" : ""}"
   >
-    <div class="thumb__content subtitle-1">${bannerItemConfig.navTitle}</div>
+    <div class="thumb__content subtitle-1" .innerHTML=${bannerItemConfig.navTitle}></div>
   </div>`;
 }
 /**
@@ -332,6 +340,8 @@ function setSwiper(block) {
   });
 }
 export default async function decorate(block) {
+  console.log(block.outerHTML);
+  
   const heroBannerConfig = getHeroBannerConfig(block);
   const bannerItemsConfig = getItemsConfig(block);
 
@@ -345,52 +355,70 @@ export default async function decorate(block) {
   render(heroBannerTemplate, block);
 
   // Restore Instrumentation
+  const bannerSlides = block.querySelectorAll(".banner-swiper .swiper-slide");
+  const thumbSlides = block.querySelectorAll(".thumb-swiper .swiper-slide");
   bannerItemsConfig.forEach((item, index) => {
-    const bannerSlide = block.querySelectorAll(".banner-swiper .swiper-slide")[index];
-
+    const bannerSlide = bannerSlides[index];
+    const thumbSlide = thumbSlides[index];
     if (item.banner.source && bannerSlide) {
       moveInstrumentation(item.banner.source, bannerSlide);
       const imageContainer = bannerSlide.querySelector(".banner__images");
+      const videoContainer = bannerSlide.querySelector(".banner__video");
+      const sources = item.banner.sources;
 
-      const cols = item.banner.source.children;
-      if (cols.length) {
-        
-        if (cols[0]) {
-          const target =
+      if (sources) {
+        if (sources.assetPc) {
+           const target =
             bannerSlide.querySelector(".pc-banner")?.closest("picture") ||
             bannerSlide.querySelector("video.pc-banner") ||
-            imageContainer ||
-            bannerSlide.querySelector(".banner__video");
-          moveInstrumentation(cols[0], target);
+            imageContainer || videoContainer;
+           moveInstrumentation(sources.assetPc, target);
         }
 
-        if (cols[2]) {
-          const target =
+        if (sources.assetMb) {
+           const target =
             bannerSlide.querySelector(".mb-banner")?.closest("picture") ||
             bannerSlide.querySelector("video.mb-banner") ||
-            imageContainer ||
-            bannerSlide.querySelector(".banner__video");
-          moveInstrumentation(cols[2], target);
+            imageContainer || videoContainer;
+           moveInstrumentation(sources.assetMb, target);
         }
 
-        if (cols[4])
+        if (sources.title) {
+          // Try to move instrumentation from the actual content element (e.g. <p> or <hX>) inside the column
+          const titleSource = sources.title.firstElementChild || sources.title;
           moveInstrumentation(
-            cols[4],
+            titleSource,
             bannerSlide.querySelector(".banner__title")
           );
+        }
 
-        if (cols[5])
+        if (sources.description) {
+          const descSource = sources.description.firstElementChild || sources.description;
           moveInstrumentation(
-            cols[5],
+            descSource,
             bannerSlide.querySelector(".banner__subtitle")
           );
+        }
 
-        if (cols[6])
+        if (sources.btn) {
+          const btnSource = sources.btn.firstElementChild || sources.btn;
           moveInstrumentation(
-            cols[6],
+            btnSource,
             bannerSlide.querySelector(".banner__btn")
           );
+        }
       }
+      if (item.thumb.source && thumbSlide) {
+        moveInstrumentation(item.thumb.source, thumbSlide);
+        const navTitleSource = item.thumb.sources.navTitle?.firstElementChild || item.thumb.sources?.navTitle;
+        if (navTitleSource) {
+          moveInstrumentation(
+            navTitleSource,
+            thumbSlide.querySelector(".thumb__content")
+          );
+        }
+      }
+
     }
   });
 
