@@ -34,7 +34,6 @@ function getItemsConfig(block) {
  * @returns
  */
 function setSupportToolPcTemplate(config) {
-  console.log(config.icon);
 
   const template = html`
     <div class="swiper-slide">
@@ -47,7 +46,6 @@ function setSupportToolPcTemplate(config) {
     </div>
   `;
 
-  console.log(template);
   return template;
 }
 
@@ -159,7 +157,6 @@ function setSwiper(block) {
   });
 }
 export default async function decorate(block) {
-  // console.log(block);
 
   const itemsConfig = getItemsConfig(block);
 
