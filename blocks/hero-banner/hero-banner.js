@@ -76,9 +76,12 @@ function getItemsConfig(block) {
         description: cols[5]?.textContent?.trim(),
         btnLabel: cols[6]?.textContent?.trim(),
         btnLink: cols[7]?.textContent?.trim(),
-        navTitle: cols[8]?.textContent?.trim(),
       },
       thumb: {
+        source: row,
+        sources: {
+          navTitle: cols[8],
+        },
         navTitle: cols[8]?.textContent?.trim(),
       },
     };
@@ -124,7 +127,6 @@ function setBannerTemplate(bannerItemConfig) {
         </div>
         <a href="${bannerItemConfig.btnLink}" class="banner__btn body-1" .innerHTML=${bannerItemConfig.btnLabel}>
         </a>
-        <div class="banner__nav-title" style="display: none;">${bannerItemConfig.navTitle}</div>
       </div>
     </div>
     <div class="cmp__hero-banner__mask"></div>
@@ -338,6 +340,7 @@ function setSwiper(block) {
   });
 }
 export default async function decorate(block) {
+  console.log(block.outerHTML);
   
   const heroBannerConfig = getHeroBannerConfig(block);
   const bannerItemsConfig = getItemsConfig(block);
@@ -403,14 +406,18 @@ export default async function decorate(block) {
             btnSource,
             bannerSlide.querySelector(".banner__btn")
           );
-
-        if (sources.navTitle) {
+        }
+      }
+      if (item.thumb.source && thumbSlide) {
+        moveInstrumentation(item.thumb.source, thumbSlide);
+        const navTitleSource = item.thumb.sources.navTitle?.firstElementChild || item.thumb.sources?.navTitle;
+        if (navTitleSource) {
           moveInstrumentation(
-            sources.navTitle,
-            bannerSlide.querySelector(".banner__nav-title")
+            navTitleSource,
+            thumbSlide.querySelector(".thumb__content")
           );
         }
-      }      }
+      }
 
     }
   });
