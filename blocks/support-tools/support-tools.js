@@ -40,7 +40,7 @@ function setSupportToolPcTemplate(config) {
     <div class="swiper-slide">
       <a class="cmp__support-tools__item" href="${config.link}">
         ${config.icon}
-        <div class="cmp__support-tools__text rt-dark-800 headline-6"
+        <div class="cmp__support-tools__text rt-dark-900 headline-6"
           .innerHTML=${config.text}></div
         >
       </a>

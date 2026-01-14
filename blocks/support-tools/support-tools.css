@@ -18,7 +18,7 @@ p {
 .cmp__support-tools__container {
   background-color: #FFFFFF;
   border-radius: 16px;
-  padding: 8px 0;
+  padding: 20px 0;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   position: relative;
 }
@@ -57,7 +57,6 @@ p {
   text-decoration: none;
   padding: 16px 29px;
   box-sizing: border-box;
-  height: 100%;
 }
 .cmp__support-tools__item:hover {
   background-color: #F5F6F8;
@@ -92,6 +91,7 @@ p {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  text-align: center;
 }
 .cmp__support-tools .swiper-button-next,
 .cmp__support-tools .swiper-button-prev {
