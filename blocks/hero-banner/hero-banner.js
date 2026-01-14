@@ -361,6 +361,10 @@ export default async function decorate(block) {
     const bannerSlide = bannerSlides[index];
     const thumbSlide = thumbSlides[index];
     if (item.banner.source && bannerSlide) {
+      // Clone the source row BEFORE moveInstrumentation consumes its attributes
+      // This allows us to use the same resource ID for the thumb slide
+      const thumbSourceClone = item.banner.source.cloneNode(false);
+
       moveInstrumentation(item.banner.source, bannerSlide);
       const imageContainer = bannerSlide.querySelector(".banner__images");
       const videoContainer = bannerSlide.querySelector(".banner__video");
@@ -409,7 +413,10 @@ export default async function decorate(block) {
         }
       }
       if (item.thumb.source && thumbSlide) {
-        moveInstrumentation(item.thumb.source, thumbSlide);
+        // Use the cloned source for the thumb slide container instrumentation
+        moveInstrumentation(thumbSourceClone, thumbSlide);
+
+        // navTitle source is separate (column), so we can move it normally
         const navTitleSource = item.thumb.sources.navTitle?.firstElementChild || item.thumb.sources?.navTitle;
         if (navTitleSource) {
           moveInstrumentation(
