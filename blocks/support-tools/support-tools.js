@@ -1,5 +1,5 @@
 import { html, render } from "https://esm.sh/lit-html";
-import { loadSwiper } from "../../scripts/3rd-party.js";
+import { loadSwiper } from "../../libs/3rd-party.js";
 import { moveInstrumentation } from "../../scripts/scripts.js";
 
 const COMPONENT_CLASS = "cmp__support-tools";
@@ -34,8 +34,6 @@ function getItemsConfig(block) {
  * @returns
  */
 function setSupportToolPcTemplate(config) {
-  console.log(config.icon);
-
   const template = html`
     <div class="swiper-slide">
       <a class="cmp__support-tools__item" href="${config.link}">
@@ -46,8 +44,6 @@ function setSupportToolPcTemplate(config) {
       </a>
     </div>
   `;
-
-  console.log(template);
   return template;
 }
 
@@ -122,13 +118,15 @@ function setSwiper(block) {
   }
 
   loadSwiper().then((Swiper) => {
-    new Swiper(swiperContainer, {
+    const swiper = new Swiper(swiperContainer, {
       slidesPerView: 2,
       centeredSlides: false,
       navigation: {
         nextEl: block.querySelector(".swiper-button-next"),
         prevEl: block.querySelector(".swiper-button-prev"),
       },
+      observer: true,
+      observeParents: true,
       breakpoints: {
         0: {
           slidesPerView: 2,
@@ -156,10 +154,15 @@ function setSwiper(block) {
         },
       },
     });
+
+    const resizeObserver = new ResizeObserver(() => {
+      swiper.update();
+    });
+    resizeObserver.observe(swiperContainer);
   });
 }
+
 export default async function decorate(block) {
-  // console.log(block);
 
   const itemsConfig = getItemsConfig(block);
 
