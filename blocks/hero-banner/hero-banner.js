@@ -1,6 +1,7 @@
 import { html, render } from "https://esm.sh/lit-html";
-import { loadSwiper } from "../../scripts/3rd-party.js";
+import { loadSwiper } from "../../libs/3rd-party.js";
 import { moveInstrumentation } from "../../scripts/scripts.js";
+import { assignInstrumentation } from "../../scripts/utils.js";
 
 const COMPONENT_CLASS = "cmp__hero-banner";
 
@@ -52,13 +53,12 @@ function getItemsConfig(block) {
       const specificMbLink = cols[2]?.querySelector("a")?.getAttribute("href");
       videoLinkMb = specificMbLink ? specificMbLink : videoLinkPc;
     }
+    console.log(row);
     
     return {
       banner: {
         source: row,
         sources: {
-          assetPc: cols[0],
-          assetMb: cols[2], 
           title: cols[4],
           description: cols[5],
           btn: cols[6]
@@ -121,11 +121,11 @@ function setBannerTemplate(bannerItemConfig) {
     <div class="banner__content component-layout">
       <div class="banner__content__wrapper">
         <div class="banner__box">
-          <div class="banner__title headline-2" .innerHTML=${bannerItemConfig.title}></div>
-          <div class="banner__subtitle headline-4" .innerHTML=${bannerItemConfig.description}>
+          <div class="banner__title headline-2" data-inst="title" .innerHTML=${bannerItemConfig.title}></div>
+          <div class="banner__subtitle headline-4" data-inst="description" .innerHTML=${bannerItemConfig.description}>
           </div>
         </div>
-        <a href="${bannerItemConfig.btnLink}" class="banner__btn body-1" .innerHTML=${bannerItemConfig.btnLabel}>
+        <a href="${bannerItemConfig.btnLink}" class="banner__btn body-1" data-inst="btn" .innerHTML=${bannerItemConfig.btnLabel}>
         </a>
       </div>
     </div>
@@ -143,7 +143,7 @@ function setThumbTemplate(bannerItemConfig, index) {
   return html` <div
     class="swiper-slide cmp__hero-banner__thumb ${index === 0 ? "cmp__hero-banner__thumb--active" : ""}"
   >
-    <div class="thumb__content subtitle-1" .innerHTML=${bannerItemConfig.navTitle}></div>
+    <div class="thumb__content subtitle-1" data-inst="navTitle" .innerHTML=${bannerItemConfig.navTitle}></div>
   </div>`;
 }
 /**
@@ -212,6 +212,8 @@ function setSwiper(block) {
         spaceBetween: 24,
         centeredSlides: false,
         watchSlidesVisibility: true,
+        observer: true,
+        observeParents: true,
         allowTouchMove: false, // 禁用手动滑动
         // 禁用导航按钮和滚动条
         navigation: false,
@@ -225,6 +227,8 @@ function setSwiper(block) {
       // 初始化banner swiper，移除thumbs选项
       bannerSwiperInstance = new Swiper(bannerSwiperContainer, {
         loop: bannerSlidesCount > 1,
+        observer: true,
+        observeParents: true,
         autoplay: {
           disableOnInteraction: true,
           delay: 40000,
@@ -340,7 +344,8 @@ function setSwiper(block) {
   });
 }
 export default async function decorate(block) {
-  console.log(block.outerHTML);
+  console.log('--- Original Block with UE Props ---');
+  console.log(block.cloneNode(true));
   
   const heroBannerConfig = getHeroBannerConfig(block);
   const bannerItemsConfig = getItemsConfig(block);
@@ -366,63 +371,18 @@ export default async function decorate(block) {
       const thumbSourceClone = item.banner.source.cloneNode(false);
 
       moveInstrumentation(item.banner.source, bannerSlide);
-      const imageContainer = bannerSlide.querySelector(".banner__images");
-      const videoContainer = bannerSlide.querySelector(".banner__video");
-      const sources = item.banner.sources;
-
-      if (sources) {
-        if (sources.assetPc) {
-           const target =
-            bannerSlide.querySelector(".pc-banner")?.closest("picture") ||
-            bannerSlide.querySelector("video.pc-banner") ||
-            imageContainer || videoContainer;
-           moveInstrumentation(sources.assetPc, target);
-        }
-
-        if (sources.assetMb) {
-           const target =
-            bannerSlide.querySelector(".mb-banner")?.closest("picture") ||
-            bannerSlide.querySelector("video.mb-banner") ||
-            imageContainer || videoContainer;
-           moveInstrumentation(sources.assetMb, target);
-        }
-
-        if (sources.title) {
-          // Try to move instrumentation from the actual content element (e.g. <p> or <hX>) inside the column
-          const titleSource = sources.title.firstElementChild || sources.title;
-          moveInstrumentation(
-            titleSource,
-            bannerSlide.querySelector(".banner__title")
-          );
-        }
-
-        if (sources.description) {
-          const descSource = sources.description.firstElementChild || sources.description;
-          moveInstrumentation(
-            descSource,
-            bannerSlide.querySelector(".banner__subtitle")
-          );
-        }
-
-        if (sources.btn) {
-          const btnSource = sources.btn.firstElementChild || sources.btn;
-          moveInstrumentation(
-            btnSource,
-            bannerSlide.querySelector(".banner__btn")
-          );
-        }
+      
+      if (item.banner.sources) {
+        assignInstrumentation(item.banner.sources, bannerSlide);
       }
+
       if (item.thumb.source && thumbSlide) {
         // Use the cloned source for the thumb slide container instrumentation
         moveInstrumentation(thumbSourceClone, thumbSlide);
 
         // navTitle source is separate (column), so we can move it normally
-        const navTitleSource = item.thumb.sources.navTitle?.firstElementChild || item.thumb.sources?.navTitle;
-        if (navTitleSource) {
-          moveInstrumentation(
-            navTitleSource,
-            thumbSlide.querySelector(".thumb__content")
-          );
+        if (item.thumb.sources) {
+          assignInstrumentation(item.thumb.sources, thumbSlide);
         }
       }
 
