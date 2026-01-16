@@ -244,28 +244,6 @@ function setSwiper(block) {
         },
         // 添加slideChange事件实现手动联动
         on: {
-          init: function () {
-            // Clean up AUE attributes from duplicated slides to prevent editor confusion
-            // This is necessary because Swiper clones the DOM elements including their attributes
-            const duplicates = this.el.querySelectorAll(
-              ".swiper-slide-duplicate"
-            );
-            duplicates.forEach((slide) => {
-              [...slide.attributes].forEach((attr) => {
-                if (attr.name.startsWith("data-aue-")) {
-                  slide.removeAttribute(attr.name);
-                }
-              });
-              // Also clean children
-              slide.querySelectorAll("*").forEach((child) => {
-                [...child.attributes].forEach((attr) => {
-                  if (attr.name.startsWith("data-aue-")) {
-                    child.removeAttribute(attr.name);
-                  }
-                });
-              });
-            });
-          },
           slideChange: function () {
             if (thumbSwiperInstance) {
               // 移除所有thumb slide的active类名

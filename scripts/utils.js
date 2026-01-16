@@ -11,12 +11,8 @@ export function assignInstrumentation(sources, container) {
   
   Object.entries(sources).forEach(([key, source]) => {
     if (!source) return;
-
-    console.log('source', source);
-    
     const target = container.querySelector(`[data-inst="${key}"]`);
     if (target) {
-      
       let actualSource = source;
       
       // Common text elements or buttons wrapped in p
@@ -24,9 +20,6 @@ export function assignInstrumentation(sources, container) {
          ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'LI'].includes(source.firstElementChild.tagName)) {
          actualSource = source.firstElementChild;
       }
-
-      console.log(actualSource, target);
-      
       moveInstrumentation(actualSource, target);
     }
   });
