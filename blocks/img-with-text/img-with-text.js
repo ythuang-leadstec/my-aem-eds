@@ -2,7 +2,7 @@ import { html, render } from "https://esm.sh/lit-html";
 import { moveInstrumentation } from "../../scripts/scripts.js";
 
 export default function decorate(block) {
-  console.log(block.cloneNode(true));
+  // console.log(block.cloneNode(true));
   
   if (!block.children.length) return;
 

@@ -53,7 +53,7 @@ function getItemsConfig(block) {
       const specificMbLink = cols[2]?.querySelector("a")?.getAttribute("href");
       videoLinkMb = specificMbLink ? specificMbLink : videoLinkPc;
     }
-    console.log(row);
+    // console.log(row);
     
     return {
       banner: {

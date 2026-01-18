@@ -8,6 +8,7 @@ import { moveInstrumentation } from './scripts.js';
  */
 export function assignInstrumentation(sources, container) {
   if (!sources || !container) return;
+  console.log("sources:", sources);
   
   Object.entries(sources).forEach(([key, source]) => {
     if (!source) return;

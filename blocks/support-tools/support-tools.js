@@ -2,7 +2,7 @@ import { html, render } from "https://esm.sh/lit-html";
 import { loadSwiper } from "../../libs/3rd-party.js";
 import { moveInstrumentation } from "../../scripts/scripts.js";
 
-const COMPONENT_CLASS = "cmp__support-tools";
+const COMPONENT_CLASS = "cmp__button";
 
 /**
  * get items config from block rows
@@ -38,9 +38,10 @@ function setSupportToolPcTemplate(config) {
     <div class="swiper-slide">
       <a class="cmp__support-tools__item" href="${config.link}">
         ${config.icon}
-        <div class="cmp__support-tools__text rt-dark-900 headline-6"
-          .innerHTML=${config.text}></div
-        >
+        <div
+          class="cmp__support-tools__text rt-dark-900 headline-6"
+          .innerHTML=${config.text}
+        ></div>
       </a>
     </div>
   `;
@@ -94,8 +95,8 @@ function setSupportToolsTemplate(itemsConfig) {
 }
 /**
  * set swiper
- * @param {HTMLElement} block 
- * @returns 
+ * @param {HTMLElement} block
+ * @returns
  */
 function setSwiper(block) {
   const swiperContainer = block.querySelector(".swiper-container");
@@ -163,7 +164,6 @@ function setSwiper(block) {
 }
 
 export default async function decorate(block) {
-
   const itemsConfig = getItemsConfig(block);
 
   const template = setSupportToolsTemplate(itemsConfig);

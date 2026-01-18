@@ -142,6 +142,52 @@
     ]
   },
   {
+    "id": "button",
+    "fields": [
+      {
+        "component": "select",
+        "name": "buttonLayout",
+        "label": "Button Style",
+        "options": [
+          {
+            "name": "Single Button",
+            "value": "normal"
+          },
+          {
+            "name": "Link Group",
+            "value": "group"
+          }
+        ]
+      },
+      {
+        "component": "richtext",
+        "name": "buttonContent",
+        "label": "Buttons (Link or List)",
+        "description": "For Single Button, add one link. For Link Group, add a bulleted list of links."
+      },
+      {
+        "component": "select",
+        "name": "buttonPosition",
+        "value": "",
+        "label": "Button Position",
+        "options": [
+          {
+            "name": "Align Left (Default)",
+            "value": "is-align-left"
+          },
+          {
+            "name": "Align Center",
+            "value": "is-align-center"
+          },
+          {
+            "name": "Align Right",
+            "value": "is-align-right"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "card",
     "fields": [
       {

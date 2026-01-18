@@ -23,6 +23,12 @@
     ]
   },
   {
+    "id": "button",
+    "components": [
+      "button"
+    ]
+  },
+  {
     "id": "cards",
     "components": [
       "card"
