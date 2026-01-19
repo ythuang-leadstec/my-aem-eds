@@ -23,24 +23,47 @@
       "fields": [
         {
           "component": "select",
-          "name": "buttonLayout",
+          "name": "buttonStyle",
           "label": "Button Style",
           "options": [
             {
-              "name": "Single Button",
-              "value": "normal"
+              "name": "Primary-m",
+              "value": "primary-m"
             },
             {
-              "name": "Link Group",
-              "value": "group"
+              "name": "Secondary-m",
+              "value": "secondary-m"
+            },
+            {
+              "name": "Secondary-s",
+              "value": "secondary-s"
+            },
+            {
+              "name": "Icon",
+              "value": "icon"
+            },
+            {
+              "name": "Text With Icon",
+              "value": "text-icon"
             }
           ]
         },
         {
-          "component": "richtext",
-          "name": "buttonContent",
-          "label": "Buttons (Link or List)",
-          "description": "For Single Button, add one link. For Link Group, add a bulleted list of links."
+          "component": "reference",
+          "name": "icon",
+          "label": "Icon (Select SVG file, only for Icon/Text With Icon styles)",
+          "value": "",
+          "accept": "image/svg+xml"
+        },
+        {
+          "component": "text",
+          "name": "buttonLabel",
+          "label": "Button Label"
+        },
+        {
+          "component": "text",
+          "name": "buttonLink",
+          "label": "Button Link"
         },
         {
           "component": "select",
@@ -68,7 +91,9 @@
   "filters": [
     {
       "id": "button",
-      "components": ["button"]
+      "components": [
+        "button"
+      ]
     }
   ]
 }
