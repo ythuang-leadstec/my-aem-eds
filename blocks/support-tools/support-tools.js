@@ -2,7 +2,7 @@ import { html, render } from "https://esm.sh/lit-html";
 import { loadSwiper } from "../../libs/3rd-party.js";
 import { moveInstrumentation } from "../../scripts/scripts.js";
 
-const COMPONENT_CLASS = "cmp__button";
+const COMPONENT_CLASS = "cmp__support-tools";
 
 /**
  * get items config from block rows

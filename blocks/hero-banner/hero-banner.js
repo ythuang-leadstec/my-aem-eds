@@ -1,7 +1,6 @@
 import { html, render } from "https://esm.sh/lit-html";
 import { loadSwiper } from "../../libs/3rd-party.js";
 import { moveInstrumentation } from "../../scripts/scripts.js";
-import { assignInstrumentation } from "../../scripts/utils.js";
 
 const COMPONENT_CLASS = "cmp__hero-banner";
 
@@ -322,8 +321,8 @@ function setSwiper(block) {
   });
 }
 export default async function decorate(block) {
-  console.log('--- Original Block with UE Props ---');
-  console.log(block.cloneNode(true));
+  // console.log('--- Original Block with UE Props ---');
+  // console.log(block.cloneNode(true));
   
   const heroBannerConfig = getHeroBannerConfig(block);
   const bannerItemsConfig = getItemsConfig(block);
@@ -351,16 +350,31 @@ export default async function decorate(block) {
       moveInstrumentation(item.banner.source, bannerSlide);
       
       if (item.banner.sources) {
-        assignInstrumentation(item.banner.sources, bannerSlide);
+        const { title, description, btn } = item.banner.sources;
+        [
+          { source: title, selector: '[data-inst="title"]' },
+          { source: description, selector: '[data-inst="description"]' },
+          { source: btn, selector: '[data-inst="btn"]' },
+        ].forEach(({ source, selector }) => {
+          const target = bannerSlide.querySelector(selector);
+          console.log(source);
+          
+          if (source.firstElementChild && target) {
+            console.log(source.firstElementChild);
+            
+            moveInstrumentation(source.firstElementChild, target);
+          }
+        });
       }
 
       if (item.thumb.source && thumbSlide) {
-        // Use the cloned source for the thumb slide container instrumentation
         moveInstrumentation(thumbSourceClone, thumbSlide);
-
-        // navTitle source is separate (column), so we can move it normally
         if (item.thumb.sources) {
-          assignInstrumentation(item.thumb.sources, thumbSlide);
+          const { navTitle } = item.thumb.sources;
+          const target = thumbSlide.querySelector('[data-inst="navTitle"]');
+          if (navTitle.firstElementChild && target) {
+             moveInstrumentation(navTitle.firstElementChild, target);
+          }
         }
       }
 
