@@ -22,19 +22,21 @@
 }
 .cmp__button .btn {
   padding: 12px 24px;
+  display: inline-block;
+  text-decoration: none;
   border-radius: 6px;
   cursor: pointer;
   color: #FFFFFF;
   border: 1px solid transparent;
 }
 .cmp__button .btn--primary-m {
-  background-color: #009EB8;
+  background-color: #009eb8;
 }
 .cmp__button .btn--primary-m:hover {
   background-color: #FFFFFF;
-  color: #009EB8;
-  border: 1px solid #009EB8;
-  box-shadow: 0px 0px 4px 0px #009EB8;
+  color: #009eb8;
+  border: 1px solid #009eb8;
+  box-shadow: 0px 0px 4px 0px #009eb8;
 }
 .cmp__button .btn--secondary-m {
   background-color: #FFFFFF;
@@ -53,11 +55,11 @@
 }
 .cmp__button .btn--secondary-s:hover {
   background-color: #FFFFFF;
-  color: #009EB8;
-  border: 1px solid #009EB8;
+  color: #009eb8;
+  border: 1px solid #009eb8;
 }
 .cmp__button .btn--loading {
-  background-color: #009EB8;
+  background-color: #009eb8;
   border: none;
   box-shadow: none;
   color: #FFFFFF;
@@ -65,7 +67,7 @@
   font-size: 0;
 }
 .cmp__button .btn--loading:hover {
-  background-color: #009EB8;
+  background-color: #009eb8;
   border: none;
   box-shadow: none;
 }
@@ -99,16 +101,16 @@
   border: 1px solid transparent;
 }
 .cmp__button .btn-icon--primary {
-  background-color: #009EB8;
+  background-color: #009eb8;
   color: #FFFFFF;
 }
 .cmp__button .btn-icon--primary:hover {
   background-color: #FFFFFF;
-  color: #009EB8;
-  border: 1px solid #009EB8;
+  color: #009eb8;
+  border: 1px solid #009eb8;
 }
 .cmp__button .btn-icon--primary:hover svg path {
-  fill: #009EB8;
+  fill: #009eb8;
 }
 .cmp__button .btn-icon--disable {
   background-color: #d6d6d6;
@@ -136,19 +138,19 @@
   color: #FFFFFF;
 }
 .cmp__button .btn-text-icon--primary {
-  background-color: #009EB8;
+  background-color: #009eb8;
 }
 .cmp__button .btn-text-icon--primary:hover {
   background-color: #FFFFFF;
-  color: #009EB8;
-  border: 1px solid #009EB8;
-  box-shadow: 0px 0px 4px 0px #009EB8;
+  color: #009eb8;
+  border: 1px solid #009eb8;
+  box-shadow: 0px 0px 4px 0px #009eb8;
 }
 .cmp__button .btn-text-icon--primary:hover span {
-  color: #009EB8;
+  color: #009eb8;
 }
 .cmp__button .btn-text-icon--primary:hover svg path {
-  fill: #009EB8;
+  fill: #009eb8;
 }
 .cmp__button .btn-text-icon--secondary {
   background-color: #FFFFFF;
