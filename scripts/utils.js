@@ -17,8 +17,7 @@ export function assignInstrumentation(sources, container) {
       let actualSource = source;
       
       // Common text elements or buttons wrapped in p
-      if (source.children.length === 1 && 
-         ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'LI'].includes(source.firstElementChild.tagName)) {
+      if (source.children.length === 1) {
          actualSource = source.firstElementChild;
       }
       moveInstrumentation(actualSource, target);
