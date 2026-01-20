@@ -70,17 +70,18 @@
     ]
   },
   {
-    "id": "rows",
+    "id": "text-v1",
     "components": [
-      "row"
+      "title",
+      "text",
+      "button-group"
     ]
   },
   {
-    "id": "row",
+    "id": "button-group",
     "components": [
-      "title",
-      "cmp__button",
-      "text"
+      "button",
+      "cmp__button"
     ]
   }
 ]

@@ -1,14 +1,29 @@
 {
   "definitions": [
     {
-      "title": "Text v1",
+      "title": "Text V1",
       "id": "text-v1",
       "plugins": {
         "xwalk": {
           "page": {
-            "resourceType": "core/franklin/components/columns/v1/columns",
+            "resourceType": "core/franklin/components/block/v1/block",
             "template": {
-              "columns": "1"
+              "name": "text-v1",
+              "model": "text-v1"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Button Group",
+      "id": "button-group",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/container/v1/container",
+            "template": {
+              "name": "button-group"
             }
           }
         }
@@ -17,26 +32,41 @@
   ],
   "models": [
     {
-      "id": "rows",
+      "id": "text-v1",
       "fields": [
         {
           "component": "text",
-          "valueType": "number",
-          "name": "rows",
-          "value": "",
-          "label": "Rows"
+          "name": "classes",
+          "label": "Block Classes",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "button-group",
+      "fields": [
+        {
+          "component": "select",
+          "name": "alignment",
+          "label": "Alignment",
+          "value": "left",
+          "options": [
+            { "name": "Left", "value": "left" },
+            { "name": "Center", "value": "center" },
+            { "name": "Right", "value": "right" }
+          ]
         }
       ]
     }
   ],
   "filters": [
     {
-      "id": "rows",
-      "components": ["row"]
+      "id": "text-v1",
+      "components": ["title", "text", "button-group"]
     },
     {
-      "id": "row",
-      "components": ["title", "cmp__button", "text"]
+      "id": "button-group",
+      "components": ["button", "cmp__button"]
     }
   ]
 }

@@ -525,14 +525,38 @@
     ]
   },
   {
-    "id": "rows",
+    "id": "text-v1",
     "fields": [
       {
         "component": "text",
-        "valueType": "number",
-        "name": "rows",
-        "value": "",
-        "label": "Rows"
+        "name": "classes",
+        "label": "Block Classes",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "button-group",
+    "fields": [
+      {
+        "component": "select",
+        "name": "alignment",
+        "label": "Alignment",
+        "value": "left",
+        "options": [
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Center",
+            "value": "center"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          }
+        ]
       }
     ]
   }
