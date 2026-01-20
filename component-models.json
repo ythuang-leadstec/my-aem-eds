@@ -145,6 +145,26 @@
     "id": "button",
     "fields": [
       {
+        "component": "boolean",
+        "label": "Shall the text field be revealed?",
+        "name": "reveal",
+        "valueType": "boolean"
+      },
+      {
+        "component": "text-input",
+        "label": "Hidden text field",
+        "name": "hidden-text",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "reveal"
+            },
+            true
+          ]
+        }
+      },
+      {
         "component": "select",
         "name": "buttonStyle",
         "label": "Button Style",
@@ -176,7 +196,27 @@
         "name": "icon",
         "label": "Icon (Select SVG file, only for Icon/Text With Icon styles)",
         "value": "",
-        "accept": "image/svg+xml"
+        "accept": "image/svg+xml",
+        "condition": {
+          "or": [
+            {
+              "===": [
+                {
+                  "var": "buttonStyle"
+                },
+                "icon"
+              ]
+            },
+            {
+              "===": [
+                {
+                  "var": "buttonStyle"
+                },
+                "text-icon"
+              ]
+            }
+          ]
+        }
       },
       {
         "component": "text",
