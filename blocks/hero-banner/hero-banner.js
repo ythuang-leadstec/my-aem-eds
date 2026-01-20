@@ -321,8 +321,8 @@ function setSwiper(block) {
   });
 }
 export default async function decorate(block) {
-  // console.log('--- Original Block with UE Props ---');
-  // console.log(block.cloneNode(true));
+  console.log('--- Original Block with UE Props ---');
+  console.log(block.cloneNode(true));
   
   const heroBannerConfig = getHeroBannerConfig(block);
   const bannerItemsConfig = getItemsConfig(block);
@@ -357,11 +357,9 @@ export default async function decorate(block) {
           { source: btn, selector: '[data-inst="btn"]' },
         ].forEach(({ source, selector }) => {
           const target = bannerSlide.querySelector(selector);
-          console.log(source);
+          // console.log(source);
           
           if (source.firstElementChild && target) {
-            console.log(source.firstElementChild);
-            
             moveInstrumentation(source.firstElementChild, target);
           }
         });

@@ -3,8 +3,12 @@ import { moveInstrumentation } from "../../scripts/scripts.js";
 
 function getItemsConfig(block) {
   console.log(block.cloneNode(true));
+  const row = block.firstElementChild;
+  if (!row) return null;
+
+  console.log(row);
   
-  const cols = [...block.children];
+  const cols = [...row.children];
   const styleEL = cols[0];
   const picture = cols[1];
   const labelEl = cols[2];
@@ -16,42 +20,36 @@ function getItemsConfig(block) {
   const pictureEl = picture.querySelector("picture");
 
   return {
+    source: row,
     sources: {
-      label: labelEl
+      label: labelEl,
     },
     style: style,
     link: link,
     pictureEl: pictureEl,
-    label: label
-  }
+    label: label,
+  };
 }
 
 export default function decorate(block) {
-  if (!block.children.length) return;
-
-  const { sources, style, link, pictureEl, label } = getItemsConfig(block);
+  const config = getItemsConfig(block);
+  if (!config) return;
   let buttonHtml;
-  if (["primary-m", "secondary-m", "secondary-s"].includes(style)) {
+  if (config.style === "icon") {
     buttonHtml = html`
-      <a class="btn btn--${style} body-1" href="${link}" data-inst="label"
-        >${label}</a
-      >
+      <a class="btn-icon btn-icon--primary" href="${config.link}"> ${config.pictureEl} </a>
     `;
-  } else if (style === "icon") {
+  } else if (config.style === "text-icon") {
     buttonHtml = html`
-      <a class="btn-icon btn-icon--primary" href="${link}"> ${pictureEl} </a>
-    `;
-  } else if (style === "text-icon") {
-    buttonHtml = html`
-      <a class="btn-text-icon btn-text-icon--primary" href="${link}">
-        ${pictureEl}
-        <span class="body-1" data-inst="label">${label}</span>
+      <a class="btn-text-icon btn-text-icon--primary" href="${config.link}">
+        ${config.pictureEl}
+        <span class="body-1" data-inst="label">${config.label}</span>
       </a>
     `;
   } else {
-    buttonHtml = html`
-      <a class="btn btn--primary-m body-1" href="${link}" data-inst="label"
-        >${label}</a
+    html`
+      <a class="btn btn--${config.style} body-1" href="${config.link}" data-inst="label"
+        >${config.label}</a
       >
     `;
   }
@@ -66,13 +64,8 @@ export default function decorate(block) {
 
   block.innerHTML = "";
   render(template, block);
-  
-  const wrapperTarget = block.querySelector(".cmp__button__wrapper");
-  if(block.children[0]) {
-    moveInstrumentation(block.children[0], wrapperTarget);
-  }
-  if(sources.label) {
-    labelTarget = block.querySelector("[data-inst='label']");
-    moveInstrumentation(sources.label, labelTarget);
+  const btn = block.querySelector('a');
+  if(config.source) {
+    moveInstrumentation(config.source, btn);
   }
 }

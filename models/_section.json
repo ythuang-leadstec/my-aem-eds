@@ -54,7 +54,8 @@
         "quotes",
         "img-with-text",
         "hero-banner",
-        "support-tools"
+        "support-tools",
+        "cmp__button"
       ]
     }
   ]

@@ -19,13 +19,14 @@
       "quotes",
       "img-with-text",
       "hero-banner",
-      "support-tools"
+      "support-tools",
+      "cmp__button"
     ]
   },
   {
-    "id": "button",
+    "id": "cmp__button",
     "components": [
-      "button"
+      "cmp__button"
     ]
   },
   {
