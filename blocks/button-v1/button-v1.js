@@ -1,6 +1,8 @@
 import { html, render } from "https://esm.sh/lit-html";
 import { moveInstrumentation } from "../../scripts/scripts.js";
 
+const COMPONENT_CLASS = "cmp__button";
+
 function getItemsConfig(block) {
   console.log(block.cloneNode(true));
   
@@ -13,11 +15,10 @@ function getItemsConfig(block) {
   const hoverIconRow = rows[4];
 
   const style = styleRow?.textContent?.trim().toLowerCase() || "primary-m";
-  const pictureEl = iconRow?.querySelector("picture");
-  const hoverPictureEl = hoverIconRow?.querySelector("picture");
-  
   const label = labelRow?.textContent?.trim() || "";
   const link = linkRow?.textContent?.trim() || "#";
+  const pictureEl = iconRow?.querySelector("picture");
+  const hoverPictureEl = hoverIconRow?.querySelector("picture");
 
   return {
     source: block,
@@ -34,6 +35,7 @@ function getItemsConfig(block) {
 
 export default function decorate(block) {
   const config = getItemsConfig(block);
+  
   if (!config) return;
   let buttonHtml;
   if (config.style === "icon") {
@@ -48,7 +50,7 @@ export default function decorate(block) {
       </a>
     `;
   } else {
-    html`
+    buttonHtml = html`
       <a class="btn btn--${config.style} body-1" href="${config.link}" data-inst="label"
         >${config.label}</a
       >
@@ -56,17 +58,21 @@ export default function decorate(block) {
   }
 
   const template = html`
-    <div class="cmp__button__container component-layout">
-      <div class="cmp__button__wrapper">${buttonHtml}</div>
+    <div class="${COMPONENT_CLASS}__container component-layout">
+      <div class="${COMPONENT_CLASS}__wrapper">${buttonHtml}</div>
     </div>
   `;
 
-  block.classList.add("cmp__button");
 
   block.innerHTML = "";
+  block.classList.add(COMPONENT_CLASS);
+
   render(template, block);
-  const btn = block.querySelector('a');
-  if(config.source) {
-    moveInstrumentation(config.source, btn);
+  
+  if(config.sources.label) {
+    console.log(config.sources.label.firstElementChild);
+    
+    const target = block.querySelector(`[data-inst="label"]`);
+    moveInstrumentation(config.sources.label.querySelector("p"), target);
   }
 }
