@@ -19,6 +19,9 @@
 .cmp__button a {
   display: inline-block;
 }
+.cmp__button picture {
+  font-size: 0;
+}
 .cmp__button img {
   width: 32px;
 }

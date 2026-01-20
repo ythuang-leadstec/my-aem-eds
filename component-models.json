@@ -528,20 +528,115 @@
     "id": "text-v1",
     "fields": [
       {
+        "component": "reference",
+        "valueType": "string",
+        "name": "bannerImage",
+        "label": "Banner Image"
+      },
+      {
+        "component": "boolean",
+        "name": "showTitle",
+        "label": "Show Title",
+        "value": true
+      },
+      {
         "component": "text",
-        "name": "classes",
-        "label": "Block Classes",
-        "value": ""
-      }
-    ]
-  },
-  {
-    "id": "button-group",
-    "fields": [
+        "name": "title",
+        "label": "Title",
+        "value": "",
+        "condition": {
+          "==": [
+            {
+              "var": "showTitle"
+            },
+            true
+          ]
+        }
+      },
+      {
+        "component": "boolean",
+        "name": "showProductStatus",
+        "label": "Show Product Status",
+        "value": true,
+        "condition": {
+          "==": [
+            {
+              "var": "showTitle"
+            },
+            true
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "productStatus",
+        "label": "Product Status",
+        "value": "",
+        "condition": {
+          "and": [
+            {
+              "==": [
+                {
+                  "var": "showTitle"
+                },
+                true
+              ]
+            },
+            {
+              "==": [
+                {
+                  "var": "showProductStatus"
+                },
+                true
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "component": "boolean",
+        "name": "showDescription",
+        "label": "Show Description",
+        "value": true
+      },
+      {
+        "component": "text",
+        "name": "description",
+        "label": "Description",
+        "value": "",
+        "condition": {
+          "==": [
+            {
+              "var": "showDescription"
+            },
+            true
+          ]
+        }
+      },
+      {
+        "component": "boolean",
+        "name": "showButtons",
+        "label": "Show Buttons",
+        "value": false
+      },
+      {
+        "component": "richtext",
+        "name": "buttonContent",
+        "label": "Buttons (Link or List)",
+        "description": "For Single Button, add one link. For Link Group, add a bulleted list of links.",
+        "condition": {
+          "==": [
+            {
+              "var": "showButtons"
+            },
+            true
+          ]
+        }
+      },
       {
         "component": "select",
-        "name": "alignment",
-        "label": "Alignment",
+        "name": "buttonAlignment",
+        "label": "Button Alignment",
         "value": "left",
         "options": [
           {
@@ -556,7 +651,15 @@
             "name": "Right",
             "value": "right"
           }
-        ]
+        ],
+        "condition": {
+          "==": [
+            {
+              "var": "showButtons"
+            },
+            true
+          ]
+        }
       }
     ]
   }

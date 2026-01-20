@@ -68,20 +68,5 @@
     "components": [
       "support-tool-item"
     ]
-  },
-  {
-    "id": "text-v1",
-    "components": [
-      "title",
-      "text",
-      "button-group"
-    ]
-  },
-  {
-    "id": "button-group",
-    "components": [
-      "button",
-      "cmp__button"
-    ]
   }
 ]
