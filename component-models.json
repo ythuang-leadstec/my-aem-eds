@@ -145,26 +145,6 @@
     "id": "button",
     "fields": [
       {
-        "component": "boolean",
-        "label": "Shall the text field be revealed?",
-        "name": "reveal",
-        "valueType": "boolean"
-      },
-      {
-        "component": "text-input",
-        "label": "Hidden text field",
-        "name": "hidden-text",
-        "valueType": "string",
-        "condition": {
-          "===": [
-            {
-              "var": "reveal"
-            },
-            true
-          ]
-        }
-      },
-      {
         "component": "select",
         "name": "buttonStyle",
         "label": "Button Style",
@@ -227,26 +207,6 @@
         "component": "text",
         "name": "buttonLink",
         "label": "Button Link"
-      },
-      {
-        "component": "select",
-        "name": "buttonPosition",
-        "value": "",
-        "label": "Button Position",
-        "options": [
-          {
-            "name": "Align Left (Default)",
-            "value": "is-align-left"
-          },
-          {
-            "name": "Align Center",
-            "value": "is-align-center"
-          },
-          {
-            "name": "Align Right",
-            "value": "is-align-right"
-          }
-        ]
       }
     ]
   },
