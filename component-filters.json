@@ -24,15 +24,15 @@
     ]
   },
   {
-    "id": "cards",
-    "components": [
-      "card"
-    ]
-  },
-  {
     "id": "cmp__button",
     "components": [
       "cmp__button"
+    ]
+  },
+  {
+    "id": "cards",
+    "components": [
+      "card"
     ]
   },
   {

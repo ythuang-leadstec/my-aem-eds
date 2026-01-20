@@ -142,25 +142,6 @@
     ]
   },
   {
-    "id": "card",
-    "fields": [
-      {
-        "component": "reference",
-        "valueType": "string",
-        "name": "image",
-        "label": "Image",
-        "multi": false
-      },
-      {
-        "component": "richtext",
-        "name": "text",
-        "value": "",
-        "label": "Text",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
     "id": "cmp__button",
     "fields": [
       {
@@ -191,9 +172,19 @@
         ]
       },
       {
+        "component": "text",
+        "name": "buttonLabel",
+        "label": "Button Label"
+      },
+      {
+        "component": "text",
+        "name": "buttonLink",
+        "label": "Button Link"
+      },
+      {
         "component": "reference",
         "name": "icon",
-        "label": "Icon (Select SVG file, only for Icon/Text With Icon styles)",
+        "label": "Icon",
         "value": "",
         "accept": "image/svg+xml",
         "condition": {
@@ -218,14 +209,50 @@
         }
       },
       {
-        "component": "text",
-        "name": "buttonLabel",
-        "label": "Button Label"
+        "component": "reference",
+        "name": "hoverIcon",
+        "label": "Hover Icon",
+        "value": "",
+        "accept": "image/svg+xml",
+        "condition": {
+          "or": [
+            {
+              "===": [
+                {
+                  "var": "buttonStyle"
+                },
+                "icon"
+              ]
+            },
+            {
+              "===": [
+                {
+                  "var": "buttonStyle"
+                },
+                "text-icon"
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "card",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
       },
       {
-        "component": "text",
-        "name": "buttonLink",
-        "label": "Button Link"
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Text",
+        "valueType": "string"
       }
     ]
   },

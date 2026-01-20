@@ -32,6 +32,8 @@ function getItemsConfig(block) {
 }
 
 export default function decorate(block) {
+  console.log(block);
+  
   const config = getItemsConfig(block);
   if (!config) return;
   let buttonHtml;
