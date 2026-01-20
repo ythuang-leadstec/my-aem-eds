@@ -3,37 +3,36 @@ import { moveInstrumentation } from "../../scripts/scripts.js";
 
 function getItemsConfig(block) {
   console.log(block.cloneNode(true));
-  const row = block.firstElementChild;
-  if (!row) return null;
-
-  console.log(row);
   
-  const cols = [...row.children];
-  const styleEL = cols[0];
-  const picture = cols[1];
-  const labelEl = cols[2];
-  const linkEl = cols[3];
+  const rows = [...block.children];
 
-  const style = styleEL?.textContent?.trim().toLowerCase() || "primary-m";
-  const label = labelEl?.textContent?.trim() || "";
-  const link = linkEl?.textContent?.trim() || "#";
-  const pictureEl = picture.querySelector("picture");
+  const styleRow = rows[0]; 
+  const labelRow = rows[1];
+  const linkRow = rows[2];
+  const iconRow = rows[3];
+  const hoverIconRow = rows[4];
+
+  const style = styleRow?.textContent?.trim().toLowerCase() || "primary-m";
+  const pictureEl = iconRow?.querySelector("picture");
+  const hoverPictureEl = hoverIconRow?.querySelector("picture");
+  
+  const label = labelRow?.textContent?.trim() || "";
+  const link = linkRow?.textContent?.trim() || "#";
 
   return {
-    source: row,
+    source: block,
     sources: {
-      label: labelEl,
+      label: labelRow,
     },
     style: style,
     link: link,
     pictureEl: pictureEl,
+    hoverPictureEl: hoverPictureEl,
     label: label,
   };
 }
 
 export default function decorate(block) {
-  console.log(block);
-  
   const config = getItemsConfig(block);
   if (!config) return;
   let buttonHtml;
