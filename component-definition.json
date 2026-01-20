@@ -250,6 +250,20 @@
               }
             }
           }
+        },
+        {
+          "title": "Text v1",
+          "id": "text-v1",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/columns/v1/columns",
+                "template": {
+                  "columns": "1"
+                }
+              }
+            }
+          }
         }
       ]
     }

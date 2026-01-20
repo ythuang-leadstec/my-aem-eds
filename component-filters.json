@@ -20,7 +20,8 @@
       "img-with-text",
       "hero-banner",
       "support-tools",
-      "cmp__button"
+      "cmp__button",
+      "text-v1"
     ]
   },
   {
@@ -66,6 +67,20 @@
     "id": "support-tools",
     "components": [
       "support-tool-item"
+    ]
+  },
+  {
+    "id": "rows",
+    "components": [
+      "row"
+    ]
+  },
+  {
+    "id": "row",
+    "components": [
+      "title",
+      "cmp__button",
+      "text"
     ]
   }
 ]

@@ -1,0 +1,42 @@
+{
+  "definitions": [
+    {
+      "title": "Text v1",
+      "id": "text-v1",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/columns/v1/columns",
+            "template": {
+              "columns": "1"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "rows",
+      "fields": [
+        {
+          "component": "text",
+          "valueType": "number",
+          "name": "rows",
+          "value": "",
+          "label": "Rows"
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "rows",
+      "components": ["row"]
+    },
+    {
+      "id": "row",
+      "components": ["title", "cmp__button", "text"]
+    }
+  ]
+}
