@@ -1,4 +1,6 @@
 export default function decorate(block) {
+  console.log(block.cloneNode(true));
+  
   const cols = [...block.firstElementChild.children];
   block.classList.add(`columns-${cols.length}-cols`);
 

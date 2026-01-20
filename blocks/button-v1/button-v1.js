@@ -4,8 +4,6 @@ import { moveInstrumentation } from "../../scripts/scripts.js";
 const COMPONENT_CLASS = "cmp__button";
 
 function getItemsConfig(block) {
-  console.log(block.cloneNode(true));
-  
   const rows = [...block.children];
 
   const styleRow = rows[0]; 
@@ -70,8 +68,6 @@ export default function decorate(block) {
   render(template, block);
   
   if(config.sources.label) {
-    console.log(config.sources.label.firstElementChild);
-    
     const target = block.querySelector(`[data-inst="label"]`);
     moveInstrumentation(config.sources.label.querySelector("p"), target);
   }
