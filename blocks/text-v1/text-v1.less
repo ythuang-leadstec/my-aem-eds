@@ -1,0 +1,47 @@
+@import (reference) "../../styles/clientlib-common/css/base.less";
+@path: "../../styles/clientlib-common/";
+
+@link-color: #37A6D9;
+.cmp__text {
+  color: #23272E;
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  &-container {
+    a {
+      text-decoration: underline;
+      color: @link-color;
+    }
+
+    .is-relative {
+      position: relative;
+
+      .cmp__text__info {
+        position: absolute;
+        text-decoration: none;
+        color: #0C3677;
+        margin-left: 12px;
+        padding-left: 24px;
+
+        .bp-mobile({
+          position: relative;
+          margin-left: 0;
+          display: block;
+          margin-top: 12px;
+        });
+        &::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 16px;
+          height: 16px;
+          background-image: url('../../../assets/images/icons/status-yellow.svg');
+          background-size: contain;
+          background-repeat: no-repeat;
+        }
+      }
+    }
+  }
+} 

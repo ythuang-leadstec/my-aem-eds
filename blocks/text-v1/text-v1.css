@@ -1,33 +1,40 @@
-.columns > div {
-  display: flex;
-  flex-direction: column;
+.cmp__text {
+  color: #23272E;
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
-
-.columns img {
-  width: 100%;
+.cmp__text-container a {
+  text-decoration: underline;
+  color: #37A6D9;
 }
-
-.columns > div > div {
-  order: 1;
+.cmp__text-container .is-relative {
+  position: relative;
 }
-
-.columns > div > .columns-img-col {
-  order: 0;
+.cmp__text-container .is-relative .cmp__text__info {
+  position: absolute;
+  text-decoration: none;
+  color: #0C3677;
+  margin-left: 12px;
+  padding-left: 24px;
 }
-
-.columns > div > .columns-img-col img {
-  display: block;
-}
-
-@media (width >= 900px) {
-  .columns > div {
-    align-items: center;
-    flex-direction: unset;
-    gap: 24px;
+@media (max-width: 768px) {
+  .cmp__text-container .is-relative .cmp__text__info {
+    position: relative;
+    margin-left: 0;
+    display: block;
+    margin-top: 12px;
   }
-
-  .columns > div > div {
-    flex: 1;
-    order: unset;
-  }
+}
+.cmp__text-container .is-relative .cmp__text__info::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background-image: url('../../../assets/images/icons/status-yellow.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
 }

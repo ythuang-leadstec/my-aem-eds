@@ -600,7 +600,7 @@
         "value": true
       },
       {
-        "component": "text",
+        "component": "richtext",
         "name": "description",
         "label": "Description",
         "value": "",
@@ -608,54 +608,6 @@
           "==": [
             {
               "var": "showDescription"
-            },
-            true
-          ]
-        }
-      },
-      {
-        "component": "boolean",
-        "name": "showButtons",
-        "label": "Show Buttons",
-        "value": false
-      },
-      {
-        "component": "richtext",
-        "name": "buttonContent",
-        "label": "Buttons (Link or List)",
-        "description": "For Single Button, add one link. For Link Group, add a bulleted list of links.",
-        "condition": {
-          "==": [
-            {
-              "var": "showButtons"
-            },
-            true
-          ]
-        }
-      },
-      {
-        "component": "select",
-        "name": "buttonAlignment",
-        "label": "Button Alignment",
-        "value": "left",
-        "options": [
-          {
-            "name": "Left",
-            "value": "left"
-          },
-          {
-            "name": "Center",
-            "value": "center"
-          },
-          {
-            "name": "Right",
-            "value": "right"
-          }
-        ],
-        "condition": {
-          "==": [
-            {
-              "var": "showButtons"
             },
             true
           ]
