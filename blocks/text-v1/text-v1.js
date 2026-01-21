@@ -14,24 +14,26 @@ function getItemsConfig(block) {
   const statusIconEL = rows[5];
   const infoEl = rows[6];
 
-  const bannerImgEl = bannerEl?.querySelector("picture");
+  const bannerImg = bannerEl?.querySelector("img")?.src || "";
   const fontStyle = fontStyleEl?.textContent?.trim() || "headline-1";
   const ifShowInfoStatus =
     ifShowInfoStatusEl?.textContent?.trim().toLowerCase() || false;
   const info = infoEl?.textContent?.trim() || "";
   const infoStatusLink =
     infoStatusLinkEL?.textContent?.trim().toLowerCase() || "";
-  const icon = statusIconEL
-    ? querySelector("img")?.src
-    : "../../../assets/images/icons/status-yellow.svg";
+  const icon =
+    statusIconEL && statusIconEL.querySelector("img")?.src
+      ? statusIconEL.querySelector("img").src
+      : "../../icons/status-yellow.svg";
+
+  console.log(icon);
 
   let content = "";
   const contentParagraph = contentEl?.firstElementChild?.querySelector("p");
 
   if (contentParagraph) {
     content = contentParagraph.innerHTML;
-
-    if (ifShowInfoStatus && info && infoStatusLink) {
+    if (ifShowInfoStatus === "true") {
       content += `<a href="${infoStatusLink}" class="${COMPONENT_CLASS}__info caption">${info}</a>`;
     }
   }
@@ -41,7 +43,7 @@ function getItemsConfig(block) {
       content: contentEl,
       info: infoEl,
     },
-    bannerImgEl: bannerImgEl,
+    bannerImg: bannerImg,
     fontStyle: fontStyle,
     content: content,
     ifShowInfoStatus: ifShowInfoStatus === "true",
@@ -58,10 +60,18 @@ export default function decorate(block) {
 
   if (!config) return;
   const textHTML = html`
-    <div class="${COMPONENT_CLASS}" style="--icon: url(${config.icon});">
+    <div class="${COMPONENT_CLASS}" style="--text-icon: url(${config.icon});">
       <div class="${COMPONENT_CLASS}-container component-layout">
-        <div class="headline-3 is-relative" .innerHTML=${config.content}></div>
+        <div
+          class="${config.fontStyle} is-relative"
+          .innerHTML=${config.content}
+        ></div>
       </div>
+      ${html`
+        <div class="${COMPONENT_CLASS}__banner" ?hidden=${!config.bannerImg}>
+          <img src="${config.bannerImg}" alt="" />
+        </div>
+      `}
     </div>
   `;
   block.innerHTML = "";

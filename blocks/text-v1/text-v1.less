@@ -7,7 +7,12 @@
   white-space: normal;
   word-break: keep-all;
   overflow-wrap: break-word;
+  position: relative;
+  background-color: transparent;
+
   &-container {
+    position: relative;
+    z-index: 1;
     a {
       text-decoration: underline;
       color: @link-color;
@@ -37,11 +42,22 @@
           transform: translateY(-50%);
           width: 16px;
           height: 16px;
-          background-image: url("../../icons/status-yellow.svg");
+          background-image: var(--text-icon);
           background-size: contain;
           background-repeat: no-repeat;
         }
       }
+    }
+  }
+  &__banner {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    img {
+      width: 100%;
+      height: 100%;
     }
   }
 }
