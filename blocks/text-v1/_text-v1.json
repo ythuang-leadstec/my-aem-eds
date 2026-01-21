@@ -27,38 +27,75 @@
           "label": "Banner Image"
         },
         {
-          "component": "boolean",
-          "name": "showTitle",
-          "label": "Show Title",
-          "value": true
+          "component": "select",
+          "name": "fontStyle",
+          "label": "Font Style",
+          "options": [
+            {
+              "name": "Headline-1",
+              "value": "headline-1"
+            },
+            {
+              "name": "Headline-2",
+              "value": "headline-2"
+            },
+            {
+              "name": "Headline-3",
+              "value": "headline-3"
+            },
+            {
+              "name": "Headline-4",
+              "value": "headline-4"
+            },
+            {
+              "name": "Headline-5",
+              "value": "headline-5"
+            },
+            {
+              "name": "Headline-6",
+              "value": "headline-6"
+            },
+            {
+              "name": "Subtitle-1",
+              "value": "subtitle-1"
+            },
+            {
+              "name": "Subtitle-2",
+              "value": "subtitle-2"
+            },
+            {
+              "name": "Body-1",
+              "value": "body-1"
+            },
+            {
+              "name": "Body-2",
+              "value": "body-2"
+            },
+            {
+              "name": "Caption",
+              "value": "caption"
+            },
+            {
+              "name": "F-16-500",
+              "value": "f-16-500"
+            },
+            {
+              "name": "F-14-100",
+              "value": "f-14-100"
+            }
+          ]
         },
         {
-          "component": "text",
-          "name": "title",
-          "label": "Title",
-          "value": "",
-          "condition": {
-            "==": [
-              {
-                "var": "showTitle"
-              },
-              true
-            ]
-          }
+          "component": "richtext",
+          "name": "textContent",
+          "label": "Text Content",
+          "value": ""
         },
         {
           "component": "boolean",
           "name": "showProductStatus",
           "label": "Show Product Status",
-          "value": true,
-          "condition": {
-            "==": [
-              {
-                "var": "showTitle"
-              },
-              true
-            ]
-          }
+          "value": true
         },
         {
           "component": "text",
@@ -66,34 +103,7 @@
           "label": "Product Status",
           "value": "",
           "condition": {
-            "and": [
-              {
-                "==": [{ "var": "showTitle" }, true]
-              },
-              {
-                "==": [{ "var": "showProductStatus" }, true]
-              }
-            ]
-          }
-        },
-        {
-          "component": "boolean",
-          "name": "showDescription",
-          "label": "Show Description",
-          "value": true
-        },
-        {
-          "component": "richtext",
-          "name": "description",
-          "label": "Description",
-          "value": "",
-          "condition": {
-            "==": [
-              {
-                "var": "showDescription"
-              },
-              true
-            ]
+            "==": [{ "var": "showProductStatus" }, true]
           }
         }
       ]

@@ -5,7 +5,7 @@ const COMPONENT_CLASS = "cmp__button";
 function getItemsConfig(block) {
   const rows = [...block.children];
 
-  const bannerEl = rows[0]; 
+  const bannerEl = rows[0];
   const ifShowTitleEl = rows[1];
   const titleEl = rows[2];
   const ifShowProductStatusEl = rows[3];
@@ -16,9 +16,11 @@ function getItemsConfig(block) {
   const bannerImgEl = bannerEl?.querySelector("picture");
   const ifShowTitle = ifShowTitleEl?.textContent?.trim().toLowerCase() || false;
   const title = titleEl?.textContent?.trim() || "";
-  const ifShowProductStatus = ifShowProductStatusEl?.textContent?.trim().toLowerCase() || false;
+  const ifShowProductStatus =
+    ifShowProductStatusEl?.textContent?.trim().toLowerCase() || false;
   const productStatus = productStatusEl?.textContent?.trim() || "";
-  const ifShowDescription = ifShowDescriptionEl?.textContent?.trim().toLowerCase() || false;
+  const ifShowDescription =
+    ifShowDescriptionEl?.textContent?.trim().toLowerCase() || false;
   const description = descriptionEl?.textContent?.trim() || "";
 
   return {
@@ -29,20 +31,20 @@ function getItemsConfig(block) {
       description: descriptionEl,
     },
     bannerImgEl: bannerImgEl,
-    ifShowTitle: ifShowTitle === 'true',
+    ifShowTitle: ifShowTitle === "true",
     title: title,
-    ifShowProductStatus: ifShowProductStatus === 'true',
+    ifShowProductStatus: ifShowProductStatus === "true",
     productStatus: productStatus,
-    ifShowDescription: ifShowDescription === 'true',
+    ifShowDescription: ifShowDescription === "true",
     description: description,
   };
 }
 export default function decorate(block) {
-  console.log(block.cloneNode(true));
+  const config = getItemsConfig(block);
 
-  console.log(getItemsConfig(block));
-  
-  const cols = [...block.children];
+  if (!config) return;
+  let textHTML;
+
   // block.classList.add(`columns-${cols.length}-cols`);
 
   // // setup image columns
