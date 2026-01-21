@@ -1,63 +1,71 @@
 import { html, render } from "https://esm.sh/lit-html";
 import { moveInstrumentation } from "../../scripts/scripts.js";
-const COMPONENT_CLASS = "cmp__button";
+const COMPONENT_CLASS = "cmp__text";
 
 function getItemsConfig(block) {
   const rows = [...block.children];
 
   const bannerEl = rows[0];
-  const ifShowTitleEl = rows[1];
-  const titleEl = rows[2];
-  const ifShowProductStatusEl = rows[3];
-  const productStatusEl = rows[4];
-  const ifShowDescriptionEl = rows[5];
-  const descriptionEl = rows[6];
+  const fontStyleEl = rows[1];
+  const contentEl = rows[2];
+
+  const ifShowInfoStatusEl = rows[3];
+  const infoStatusLinkEL = rows[4];
+  const statusIconEL = rows[5];
+  const infoEl = rows[6];
 
   const bannerImgEl = bannerEl?.querySelector("picture");
-  const ifShowTitle = ifShowTitleEl?.textContent?.trim().toLowerCase() || false;
-  const title = titleEl?.textContent?.trim() || "";
-  const ifShowProductStatus =
-    ifShowProductStatusEl?.textContent?.trim().toLowerCase() || false;
-  const productStatus = productStatusEl?.textContent?.trim() || "";
-  const ifShowDescription =
-    ifShowDescriptionEl?.textContent?.trim().toLowerCase() || false;
-  const description = descriptionEl?.textContent?.trim() || "";
+  const fontStyle = fontStyleEl?.textContent?.trim() || "headline-1";
+  const ifShowInfoStatus =
+    ifShowInfoStatusEl?.textContent?.trim().toLowerCase() || false;
+  const info = infoEl?.textContent?.trim() || "";
+  const infoStatusLink =
+    infoStatusLinkEL?.textContent?.trim().toLowerCase() || "";
+  const icon = statusIconEL
+    ? querySelector("img")?.src
+    : "../../../assets/images/icons/status-yellow.svg";
 
+  let content = "";
+  const contentParagraph = contentEl?.firstElementChild?.querySelector("p");
+
+  if (contentParagraph) {
+    content = contentParagraph.innerHTML;
+
+    if (ifShowInfoStatus && info && infoStatusLink) {
+      content += `<a href="${infoStatusLink}" class="${COMPONENT_CLASS}__info caption">${info}</a>`;
+    }
+  }
   return {
     source: block,
     sources: {
-      title: titleEl,
-      productStatus: productStatusEl,
-      description: descriptionEl,
+      content: contentEl,
+      info: infoEl,
     },
     bannerImgEl: bannerImgEl,
-    ifShowTitle: ifShowTitle === "true",
-    title: title,
-    ifShowProductStatus: ifShowProductStatus === "true",
-    productStatus: productStatus,
-    ifShowDescription: ifShowDescription === "true",
-    description: description,
+    fontStyle: fontStyle,
+    content: content,
+    ifShowInfoStatus: ifShowInfoStatus === "true",
+    info: info,
+    infoStatusLink: infoStatusLink,
+    icon: icon,
   };
 }
 export default function decorate(block) {
+  console.log(block.cloneNode(true));
+
   const config = getItemsConfig(block);
+  console.log(config);
 
   if (!config) return;
-  let textHTML;
+  const textHTML = html`
+    <div class="${COMPONENT_CLASS}" style="--icon: url(${config.icon});">
+      <div class="${COMPONENT_CLASS}-container component-layout">
+        <div class="headline-3 is-relative" .innerHTML=${config.content}></div>
+      </div>
+    </div>
+  `;
+  block.innerHTML = "";
+  block.classList.add(COMPONENT_CLASS);
 
-  // block.classList.add(`columns-${cols.length}-cols`);
-
-  // // setup image columns
-  // [...block.children].forEach((row) => {
-  //   [...row.children].forEach((col) => {
-  //     const pic = col.querySelector('picture');
-  //     if (pic) {
-  //       const picWrapper = pic.closest('div');
-  //       if (picWrapper && picWrapper.children.length === 1) {
-  //         // picture is only content in column
-  //         picWrapper.classList.add('columns-img-col');
-  //       }
-  //     }
-  //   });
-  // });
+  render(textHTML, block);
 }

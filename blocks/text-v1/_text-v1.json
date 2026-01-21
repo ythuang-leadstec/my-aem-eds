@@ -93,17 +93,34 @@
         },
         {
           "component": "boolean",
-          "name": "showProductStatus",
-          "label": "Show Product Status",
+          "name": "showStatusInfo",
+          "label": "Show Status Info",
           "value": true
         },
         {
           "component": "text",
-          "name": "productStatus",
-          "label": "Product Status",
+          "name": "statusLink",
+          "label": "Link",
+          "condition": {
+            "==": [{ "var": "showStatusInfo" }, true]
+          }
+        },
+        {
+          "component": "reference",
+          "name": "status",
+          "label": "Status Icon",
           "value": "",
           "condition": {
-            "==": [{ "var": "showProductStatus" }, true]
+            "==": [{ "var": "showStatusInfo" }, true]
+          }
+        },
+        {
+          "component": "text",
+          "name": "info",
+          "label": "Info",
+          "value": "",
+          "condition": {
+            "==": [{ "var": "showStatusInfo" }, true]
           }
         }
       ]
