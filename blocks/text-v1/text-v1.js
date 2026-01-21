@@ -1,7 +1,48 @@
+import { html, render } from "https://esm.sh/lit-html";
+import { moveInstrumentation } from "../../scripts/scripts.js";
+const COMPONENT_CLASS = "cmp__button";
+
+function getItemsConfig(block) {
+  const rows = [...block.children];
+
+  const bannerEl = rows[0]; 
+  const ifShowTitleEl = rows[1];
+  const titleEl = rows[2];
+  const ifShowProductStatusEl = rows[3];
+  const productStatusEl = rows[4];
+  const ifShowDescriptionEl = rows[5];
+  const descriptionEl = rows[6];
+
+  const bannerImgEl = bannerEl?.querySelector("picture");
+  const ifShowTitle = ifShowTitleEl?.textContent?.trim().toLowerCase() || false;
+  const title = titleEl?.textContent?.trim() || "";
+  const ifShowProductStatus = ifShowProductStatusEl?.textContent?.trim().toLowerCase() || false;
+  const productStatus = productStatusEl?.textContent?.trim() || "";
+  const ifShowDescription = ifShowDescriptionEl?.textContent?.trim().toLowerCase() || false;
+  const description = descriptionEl?.textContent?.trim() || "";
+
+  return {
+    source: block,
+    sources: {
+      title: titleEl,
+      productStatus: productStatusEl,
+      description: descriptionEl,
+    },
+    bannerImgEl: bannerImgEl,
+    ifShowTitle: ifShowTitle === 'true',
+    title: title,
+    ifShowProductStatus: ifShowProductStatus === 'true',
+    productStatus: productStatus,
+    ifShowDescription: ifShowDescription === 'true',
+    description: description,
+  };
+}
 export default function decorate(block) {
   console.log(block.cloneNode(true));
 
-  // const cols = [...block.firstElementChild.children];
+  console.log(getItemsConfig(block));
+  
+  const cols = [...block.children];
   // block.classList.add(`columns-${cols.length}-cols`);
 
   // // setup image columns
