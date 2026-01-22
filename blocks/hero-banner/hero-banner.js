@@ -419,7 +419,7 @@ export default async function decorate(block) {
       }
 
       if (item.thumb.source && thumbSlide) {
-        moveInstrumentation(thumbSourceClone, thumbSlide);
+        // moveInstrumentation(thumbSourceClone, thumbSlide);
         if (item.thumb.sources) {
           const { navTitle } = item.thumb.sources;
           const target = thumbSlide.querySelector('[data-inst="navTitle"]');
