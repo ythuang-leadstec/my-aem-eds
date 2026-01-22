@@ -178,13 +178,6 @@ export default async function decorate(block) {
     if (item.source && supportToolSlide) {
       moveInstrumentation(item.source, supportToolSlide);
       const cols = [...item.source.children];
-      if (cols[1]) {
-        const target = supportToolSlide.querySelector("picture");
-        if (target) {
-          moveInstrumentation(cols[1], target);
-        }
-      }
-
       if (cols[2]) {
         const target = supportToolSlide.querySelector(
           ".cmp__support-tools__text"
