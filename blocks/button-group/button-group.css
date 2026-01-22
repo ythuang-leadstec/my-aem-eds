@@ -2,34 +2,36 @@
   max-width: unset;
   padding: 0;
 }
-.cmp__button--multiple-buttons {
+.cmp__button-group--multiple-buttons .cmp__button-group__wrapper {
   display: flex;
   gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
 }
 @media (max-width: 768px) {
-  .cmp__button--multiple-buttons {
+  .cmp__button-group--multiple-buttons .cmp__button-group__wrapper {
     gap: 8px;
   }
 }
 @media (max-width: 768px) {
-  .cmp__button.is-hide-text-in-mobile span {
+  .cmp__button-group.is-hide-text-in-mobile span {
     display: none;
   }
 }
-.cmp__button a {
+.cmp__button-group a {
   display: inline-block;
 }
-.cmp__button picture {
+.cmp__button-group picture {
   font-size: 0;
 }
-.cmp__button img {
+.cmp__button-group img {
   width: 32px;
 }
-.cmp__button button {
+.cmp__button-group button {
   outline: none;
   border: none;
 }
-.cmp__button .btn {
+.cmp__button-group .btn {
   padding: 12px 24px;
   display: inline-block;
   text-decoration: none;
@@ -38,36 +40,36 @@
   color: #FFFFFF;
   border: 1px solid transparent;
 }
-.cmp__button .btn--primary-m {
+.cmp__button-group .btn--primary-m {
   background-color: #009eb8;
 }
-.cmp__button .btn--primary-m:hover {
+.cmp__button-group .btn--primary-m:hover {
   background-color: #FFFFFF;
   color: #009eb8;
   border: 1px solid #009eb8;
   box-shadow: 0px 0px 4px 0px #009eb8;
 }
-.cmp__button .btn--secondary-m {
+.cmp__button-group .btn--secondary-m {
   background-color: #FFFFFF;
   color: #0c3677;
   border: 1px solid #d6d6d6;
 }
-.cmp__button .btn--secondary-m:hover {
+.cmp__button-group .btn--secondary-m:hover {
   background-color: #0c3677;
   color: #FFFFFF;
   border: 1px solid #d6d6d6;
 }
-.cmp__button .btn--secondary-s {
+.cmp__button-group .btn--secondary-s {
   background-color: #FFFFFF;
   color: #FFFFFF;
   padding: 8px 24px;
 }
-.cmp__button .btn--secondary-s:hover {
+.cmp__button-group .btn--secondary-s:hover {
   background-color: #FFFFFF;
   color: #009eb8;
   border: 1px solid #009eb8;
 }
-.cmp__button .btn--loading {
+.cmp__button-group .btn--loading {
   background-color: #009eb8;
   border: none;
   box-shadow: none;
@@ -75,12 +77,12 @@
   padding: 8px 24px;
   font-size: 0;
 }
-.cmp__button .btn--loading:hover {
+.cmp__button-group .btn--loading:hover {
   background-color: #009eb8;
   border: none;
   box-shadow: none;
 }
-.cmp__button .btn--loading img {
+.cmp__button-group .btn--loading img {
   width: 32px;
   animation: spin 0.8s linear infinite;
 }
@@ -89,52 +91,52 @@
     transform: rotate(360deg);
   }
 }
-.cmp__button .btn--disable {
+.cmp__button-group .btn--disable {
   background-color: #e2e2e2;
   cursor: default;
   border: none;
   box-shadow: none;
   color: #FFFFFF;
 }
-.cmp__button .btn--disable:hover {
+.cmp__button-group .btn--disable:hover {
   background-color: #e2e2e2;
   color: #FFFFFF;
   border: none;
   box-shadow: none;
 }
-.cmp__button .btn-icon {
+.cmp__button-group .btn-icon {
   border-radius: 6px;
   padding: 10px;
   font-size: 0;
   cursor: pointer;
   border: 1px solid transparent;
 }
-.cmp__button .btn-icon--primary {
+.cmp__button-group .btn-icon--primary {
   background-color: #009eb8;
   color: #FFFFFF;
 }
-.cmp__button .btn-icon--primary:hover {
+.cmp__button-group .btn-icon--primary:hover {
   background-color: #FFFFFF;
   color: #009eb8;
   border: 1px solid #009eb8;
 }
-.cmp__button .btn-icon--primary:hover svg path {
+.cmp__button-group .btn-icon--primary:hover svg path {
   fill: #009eb8;
 }
-.cmp__button .btn-icon--disable {
+.cmp__button-group .btn-icon--disable {
   background-color: #d6d6d6;
   cursor: default;
   border: none;
   box-shadow: none;
   color: #FFFFFF;
 }
-.cmp__button .btn-icon--disable:hover {
+.cmp__button-group .btn-icon--disable:hover {
   background-color: #d6d6d6;
   color: #FFFFFF;
   border: none;
   box-shadow: none;
 }
-.cmp__button .btn-text-icon {
+.cmp__button-group .btn-text-icon {
   padding: 8px 12px;
   border-radius: 6px;
   cursor: pointer;
@@ -143,60 +145,60 @@
   align-items: center;
   gap: 11px;
 }
-.cmp__button .btn-text-icon span {
+.cmp__button-group .btn-text-icon span {
   color: #FFFFFF;
 }
-.cmp__button .btn-text-icon--primary {
+.cmp__button-group .btn-text-icon--primary {
   background-color: #009eb8;
 }
-.cmp__button .btn-text-icon--primary:hover {
+.cmp__button-group .btn-text-icon--primary:hover {
   background-color: #FFFFFF;
   color: #009eb8;
   border: 1px solid #009eb8;
   box-shadow: 0px 0px 4px 0px #009eb8;
 }
-.cmp__button .btn-text-icon--primary:hover span {
+.cmp__button-group .btn-text-icon--primary:hover span {
   color: #009eb8;
 }
-.cmp__button .btn-text-icon--primary:hover svg path {
+.cmp__button-group .btn-text-icon--primary:hover svg path {
   fill: #009eb8;
 }
-.cmp__button .btn-text-icon--secondary {
+.cmp__button-group .btn-text-icon--secondary {
   background-color: #FFFFFF;
   border: 1px solid #009eb8;
 }
-.cmp__button .btn-text-icon--secondary span {
+.cmp__button-group .btn-text-icon--secondary span {
   color: #009eb8;
 }
-.cmp__button .btn-text-icon--secondary:hover {
+.cmp__button-group .btn-text-icon--secondary:hover {
   background-color: #009eb8;
   color: #FFFFFF;
   border: 1px solid #009eb8;
   box-shadow: 0px 0px 4px 0px #37a6d9;
 }
-.cmp__button .btn-text-icon--secondary:hover span {
+.cmp__button-group .btn-text-icon--secondary:hover span {
   color: #FFFFFF;
 }
-.cmp__button .btn-text-icon--secondary:hover svg path {
+.cmp__button-group .btn-text-icon--secondary:hover svg path {
   fill: #FFFFFF;
 }
-.cmp__button .btn-text-icon--disable {
+.cmp__button-group .btn-text-icon--disable {
   background-color: #e2e2e2;
   cursor: default;
   border: none;
   box-shadow: none;
 }
-.cmp__button .btn-text-icon--disable span {
+.cmp__button-group .btn-text-icon--disable span {
   color: #FFFFFF;
 }
-.cmp__button .btn-text-icon--disable:hover {
+.cmp__button-group .btn-text-icon--disable:hover {
   background-color: #e2e2e2;
   border: none;
   box-shadow: none;
 }
-.cmp__button .btn-text-icon--disable:hover span {
+.cmp__button-group .btn-text-icon--disable:hover span {
   color: #FFFFFF;
 }
-.cmp__button .btn-text-icon--disable:hover svg path {
+.cmp__button-group .btn-text-icon--disable:hover svg path {
   fill: #FFFFFF;
 }
