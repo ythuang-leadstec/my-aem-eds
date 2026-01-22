@@ -58,8 +58,8 @@ function setSupportToolMbTemplate(config) {
     <div>
       <a class="cmp__support-tools__item" href="${config.link}">
         ${config.iconMb}
-        <span class="cmp__support-tools__text rt-dark-800 headline-6"
-          >${config.text}</span
+        <span class="cmp__support-tools__text rt-dark-800 headline-6" .innerHTML=${config.text}
+          ></span
         >
       </a>
     </div>
