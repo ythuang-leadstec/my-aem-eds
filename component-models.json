@@ -606,7 +606,7 @@
         "value": true
       },
       {
-        "component": "text",
+        "component": "aem-content",
         "name": "statusLink",
         "label": "Link",
         "condition": {
