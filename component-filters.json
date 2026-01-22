@@ -20,14 +20,14 @@
       "img-with-text",
       "hero-banner",
       "support-tools",
-      "cmp__button",
+      "button-group",
       "text-v1"
     ]
   },
   {
-    "id": "cmp__button",
+    "id": "button-group",
     "components": [
-      "cmp__button"
+      "button-item"
     ]
   },
   {

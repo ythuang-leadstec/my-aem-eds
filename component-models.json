@@ -142,7 +142,31 @@
     ]
   },
   {
-    "id": "cmp__button",
+    "id": "button-group",
+    "fields": [
+      {
+        "component": "select",
+        "name": "align",
+        "label": "Align",
+        "options": [
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Center",
+            "value": "center"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "button-item",
     "fields": [
       {
         "component": "select",
