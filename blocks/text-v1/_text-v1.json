@@ -86,10 +86,11 @@
           ]
         },
         {
-          "component": "richtext",
+          "component": "textarea",
           "name": "textContent",
           "label": "Text Content",
-          "value": ""
+          "value": "",
+          "rows": 4
         },
         {
           "component": "boolean",
@@ -102,7 +103,12 @@
           "name": "statusLink",
           "label": "Link",
           "condition": {
-            "==": [{ "var": "showStatusInfo" }, true]
+            "==": [
+              {
+                "var": "showStatusInfo"
+              },
+              true
+            ]
           }
         },
         {
@@ -111,7 +117,12 @@
           "label": "Status Icon",
           "value": "",
           "condition": {
-            "==": [{ "var": "showStatusInfo" }, true]
+            "==": [
+              {
+                "var": "showStatusInfo"
+              },
+              true
+            ]
           }
         },
         {
@@ -120,7 +131,12 @@
           "label": "Info",
           "value": "",
           "condition": {
-            "==": [{ "var": "showStatusInfo" }, true]
+            "==": [
+              {
+                "var": "showStatusInfo"
+              },
+              true
+            ]
           }
         }
       ]

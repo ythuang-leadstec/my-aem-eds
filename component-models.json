@@ -593,10 +593,11 @@
         ]
       },
       {
-        "component": "richtext",
+        "component": "textarea",
         "name": "textContent",
         "label": "Text Content",
-        "value": ""
+        "value": "",
+        "rows": 4
       },
       {
         "component": "boolean",
