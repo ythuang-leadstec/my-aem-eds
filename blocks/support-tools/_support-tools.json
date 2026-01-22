@@ -37,7 +37,7 @@
       "id": "support-tool-item",
       "fields": [
         {
-          "component": "text",
+          "component": "aem-content",
           "name": "link",
           "label": "Link",
           "valueType": "string"

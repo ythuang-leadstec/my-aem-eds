@@ -102,7 +102,7 @@
           "valueType": "string"
         },
         {
-          "component": "text",
+          "component": "aem-content",
           "name": "ctaLink",
           "label": "Button Link",
           "valueType": "string"

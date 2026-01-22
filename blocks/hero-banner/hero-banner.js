@@ -12,7 +12,7 @@ const COMPONENT_CLASS = "cmp__hero-banner";
 function getHeroBannerConfig(block) {
   const firstRow = block.children[0];
   const heroBannerConfigRows = [...firstRow.children].map(
-    (row) => row.firstElementChild
+    (row) => row.firstElementChild,
   );
   const autoPlay =
     heroBannerConfigRows[0]?.textContent?.trim().toLowerCase() === "true";
@@ -24,7 +24,6 @@ function getHeroBannerConfig(block) {
  * @returns
  */
 function getItemsConfig(block) {
-
   const items = [...block.children].slice(1).map((row) => {
     const cols = [...row.children];
 
@@ -53,14 +52,14 @@ function getItemsConfig(block) {
       videoLinkMb = specificMbLink ? specificMbLink : videoLinkPc;
     }
     // console.log(row);
-    
+
     return {
       banner: {
         source: row,
         sources: {
           title: cols[4],
           description: cols[5],
-          btn: cols[6]
+          btn: cols[6],
         },
         assets: {
           isImgAsset: isImgAsset,
@@ -90,22 +89,34 @@ function getItemsConfig(block) {
 
 /**
  * set asset template
- * @param {object} assetConfig 
- * @returns 
+ * @param {object} assetConfig
+ * @returns
  */
 function setAssetTemplate(assetConfig) {
   if (assetConfig.isImgAsset) {
     return html`
-    <div class="banner__images">
-      ${assetConfig.imagePc} ${assetConfig.imageMb}
-    </div>
+      <div class="banner__images">
+        ${assetConfig.imagePc} ${assetConfig.imageMb}
+      </div>
     `;
   } else {
     return html`
-    <div class="banner__video">
-        <video src="${assetConfig.videoLinkPc}" class="pc-banner" autoplay muted loop></video>
-        <video src="${assetConfig.videoLinkMb}" class="mb-banner" autoplay muted loop></video>
-    </div>
+      <div class="banner__video">
+        <video
+          src="${assetConfig.videoLinkPc}"
+          class="pc-banner"
+          autoplay
+          muted
+          loop
+        ></video>
+        <video
+          src="${assetConfig.videoLinkMb}"
+          class="mb-banner"
+          autoplay
+          muted
+          loop
+        ></video>
+      </div>
     `;
   }
 }
@@ -120,11 +131,23 @@ function setBannerTemplate(bannerItemConfig) {
     <div class="banner__content component-layout">
       <div class="banner__content__wrapper">
         <div class="banner__box">
-          <div class="banner__title headline-2" data-inst="title" .innerHTML=${bannerItemConfig.title}></div>
-          <div class="banner__subtitle headline-4" data-inst="description" .innerHTML=${bannerItemConfig.description}>
-          </div>
+          <div
+            class="banner__title headline-2"
+            data-inst="title"
+            .innerHTML=${bannerItemConfig.title}
+          ></div>
+          <div
+            class="banner__subtitle headline-4"
+            data-inst="description"
+            .innerHTML=${bannerItemConfig.description}
+          ></div>
         </div>
-        <a href="${bannerItemConfig.btnLink}" class="banner__btn body-1" data-inst="btn" .innerHTML=${bannerItemConfig.btnLabel}>
+        <a
+          href="${bannerItemConfig.btnLink}"
+          class="banner__btn body-1"
+          data-inst="btn"
+          .innerHTML=${bannerItemConfig.btnLabel}
+        >
         </a>
       </div>
     </div>
@@ -140,9 +163,15 @@ function setBannerTemplate(bannerItemConfig) {
  */
 function setThumbTemplate(bannerItemConfig, index) {
   return html` <div
-    class="swiper-slide cmp__hero-banner__thumb ${index === 0 ? "cmp__hero-banner__thumb--active" : ""}"
+    class="swiper-slide cmp__hero-banner__thumb ${index === 0
+      ? "cmp__hero-banner__thumb--active"
+      : ""}"
   >
-    <div class="thumb__content subtitle-1" data-inst="navTitle" .innerHTML=${bannerItemConfig.navTitle}></div>
+    <div
+      class="thumb__content subtitle-1"
+      data-inst="navTitle"
+      .innerHTML=${bannerItemConfig.navTitle}
+    ></div>
   </div>`;
 }
 /**
@@ -172,7 +201,9 @@ function setHeroBannerTemplate(bannerItemsConfig, heroBannerConfig) {
         <div class="thumb-swiper__wrapper component-layout">
           <div class="swiper-container swiper-container-thumbs">
             <div class="swiper-wrapper cmp__hero-banner__thumbs">
-              ${bannerItemsConfig.map((item, index) => setThumbTemplate(item.thumb, index))}
+              ${bannerItemsConfig.map((item, index) =>
+                setThumbTemplate(item.thumb, index),
+              )}
             </div>
           </div>
         </div>
@@ -243,6 +274,28 @@ function setSwiper(block) {
         },
         // 添加slideChange事件实现手动联动
         on: {
+          init: function () {
+            // Clean up AUE attributes from duplicated slides to prevent editor confusion
+            // This is necessary because Swiper clones the DOM elements including their attributes
+            const duplicates = this.el.querySelectorAll(
+              ".swiper-slide-duplicate",
+            );
+            duplicates.forEach((slide) => {
+              [...slide.attributes].forEach((attr) => {
+                if (attr.name.startsWith("data-aue-")) {
+                  slide.removeAttribute(attr.name);
+                }
+              });
+              // Also clean children
+              slide.querySelectorAll("*").forEach((child) => {
+                [...child.attributes].forEach((attr) => {
+                  if (attr.name.startsWith("data-aue-")) {
+                    child.removeAttribute(attr.name);
+                  }
+                });
+              });
+            });
+          },
           slideChange: function () {
             if (thumbSwiperInstance) {
               // 移除所有thumb slide的active类名
@@ -255,7 +308,7 @@ function setSwiper(block) {
               // 为对应的thumb slide添加active类名
               if (thumbSwiperInstance.slides[activeIndex]) {
                 thumbSwiperInstance.slides[activeIndex].classList.add(
-                  "cmp__hero-banner__thumb--active"
+                  "cmp__hero-banner__thumb--active",
                 );
               }
 
@@ -293,7 +346,7 @@ function setSwiper(block) {
             slide.classList.remove("cmp__hero-banner__thumb--active");
           });
           thumbSwiperInstance.clickedSlide.classList.add(
-            "cmp__hero-banner__thumb--active"
+            "cmp__hero-banner__thumb--active",
           );
 
           const clickedIndex = thumbSwiperInstance.clickedIndex;
@@ -308,7 +361,7 @@ function setSwiper(block) {
     } else {
       // 仅1张banner时，隐藏左右导航按钮
       const container = bannerSwiperContainer.closest(
-        ".cmp__hero-banner__container"
+        ".cmp__hero-banner__container",
       );
       if (container) {
         container.classList.add("single-banner");
@@ -321,15 +374,15 @@ function setSwiper(block) {
   });
 }
 export default async function decorate(block) {
-  console.log('--- Original Block with UE Props ---');
-  console.log(block.cloneNode(true));
-  
+  // console.log("--- Original Block with UE Props ---");
+  // console.log(block.cloneNode(true));
+
   const heroBannerConfig = getHeroBannerConfig(block);
   const bannerItemsConfig = getItemsConfig(block);
 
   const heroBannerTemplate = setHeroBannerTemplate(
     bannerItemsConfig,
-    heroBannerConfig
+    heroBannerConfig,
   );
 
   block.innerHTML = "";
@@ -348,7 +401,7 @@ export default async function decorate(block) {
       const thumbSourceClone = item.banner.source.cloneNode(false);
 
       moveInstrumentation(item.banner.source, bannerSlide);
-      
+
       if (item.banner.sources) {
         const { title, description, btn } = item.banner.sources;
         [
@@ -358,7 +411,7 @@ export default async function decorate(block) {
         ].forEach(({ source, selector }) => {
           const target = bannerSlide.querySelector(selector);
           // console.log(source);
-          
+
           if (source.firstElementChild && target) {
             moveInstrumentation(source.firstElementChild, target);
           }
@@ -371,11 +424,10 @@ export default async function decorate(block) {
           const { navTitle } = item.thumb.sources;
           const target = thumbSlide.querySelector('[data-inst="navTitle"]');
           if (navTitle.firstElementChild && target) {
-             moveInstrumentation(navTitle.firstElementChild, target);
+            moveInstrumentation(navTitle.firstElementChild, target);
           }
         }
       }
-
     }
   });
 
