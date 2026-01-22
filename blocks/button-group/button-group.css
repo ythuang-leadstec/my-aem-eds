@@ -1,4 +1,28 @@
-.section > .button-wrapper {
+@media (min-width: 769px) and (max-width: 1024px) {
+}@media (max-width: 768px) {
+}@media (min-width: 769px) and (max-width: 1024px) {
+}@media (max-width: 768px) {
+}@media (min-width: 769px) and (max-width: 1024px) {
+}@media (max-width: 768px) {
+}@media (min-width: 769px) and (max-width: 1024px) {
+}@media (max-width: 768px) {
+}@media (min-width: 769px) and (max-width: 1024px) {
+}@media (max-width: 768px) {
+}@media (min-width: 769px) and (max-width: 1024px) {
+}@media (max-width: 768px) {
+}@media (min-width: 769px) and (max-width: 1024px) {
+}@media (max-width: 768px) {
+}@media (min-width: 769px) and (max-width: 1024px) {
+}@media (max-width: 768px) {
+}@media (min-width: 769px) and (max-width: 1024px) {
+}@media (max-width: 768px) {
+}@media (min-width: 769px) and (max-width: 1024px) {
+}@media (max-width: 768px) {
+}@media (min-width: 769px) and (max-width: 1024px) {
+}@media (max-width: 768px) {
+}@media (min-width: 769px) and (max-width: 1024px) {
+}@media (max-width: 768px) {
+}.section > .button-wrapper {
   max-width: unset;
   padding: 0;
 }
@@ -12,6 +36,15 @@
   .cmp__button-group--multiple-buttons .cmp__button-group__wrapper {
     gap: 8px;
   }
+}
+.cmp__button-group--multiple-buttons .cmp__button-group__wrapper.is-align-left {
+  justify-content: flex-start;
+}
+.cmp__button-group--multiple-buttons .cmp__button-group__wrapper.is-align-center {
+  justify-content: center;
+}
+.cmp__button-group--multiple-buttons .cmp__button-group__wrapper.is-align-right {
+  justify-content: flex-end;
 }
 @media (max-width: 768px) {
   .cmp__button-group.is-hide-text-in-mobile span {
@@ -30,6 +63,11 @@
 .cmp__button-group button {
   outline: none;
   border: none;
+}
+.cmp__button-group .icon {
+  display: inline-block;
+  width: 32px;
+  height: auto;
 }
 .cmp__button-group .btn {
   padding: 12px 24px;
@@ -103,6 +141,15 @@
   color: #FFFFFF;
   border: none;
   box-shadow: none;
+}
+.cmp__button-group .btn.is-have-hover-icon .hover-icon {
+  display: none;
+}
+.cmp__button-group .btn.is-have-hover-icon:hover .icon {
+  display: none;
+}
+.cmp__button-group .btn.is-have-hover-icon:hover .hover-icon {
+  display: inline-block;
 }
 .cmp__button-group .btn-icon {
   border-radius: 6px;

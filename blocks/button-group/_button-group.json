@@ -90,7 +90,15 @@
         {
           "component": "text",
           "name": "buttonLabel",
-          "label": "Button Label"
+          "label": "Button Label",
+          "condition": {
+            "!=": [
+              {
+                "var": "buttonStyle"
+              },
+              "icon"
+            ]
+          }
         },
         {
           "component": "aem-content",
@@ -157,9 +165,7 @@
   "filters": [
     {
       "id": "button-group",
-      "components": [
-        "button-item"
-      ]
+      "components": ["button-item"]
     }
   ]
 }

@@ -198,7 +198,15 @@
       {
         "component": "text",
         "name": "buttonLabel",
-        "label": "Button Label"
+        "label": "Button Label",
+        "condition": {
+          "!=": [
+            {
+              "var": "buttonStyle"
+            },
+            "icon"
+          ]
+        }
       },
       {
         "component": "aem-content",
