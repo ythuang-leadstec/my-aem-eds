@@ -66,9 +66,4 @@ export default function decorate(block) {
   block.classList.add(COMPONENT_CLASS);
 
   render(template, block);
-  
-  if(config.sources.label) {
-    const target = block.querySelector(`[data-inst="label"]`);
-    moveInstrumentation(config.sources.label.querySelector("p"), target);
-  }
 }
