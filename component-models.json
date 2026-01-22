@@ -177,7 +177,7 @@
         "label": "Button Label"
       },
       {
-        "component": "text",
+        "component": "aem-content",
         "name": "buttonLink",
         "label": "Button Link"
       },
