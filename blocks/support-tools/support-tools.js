@@ -17,13 +17,17 @@ function getItemsConfig(block) {
     if (picture) {
       picture.classList.add(`${COMPONENT_CLASS}__icon`);
     }
-
+    let text = null;
+    if(textCol) {
+      text = textCol.firstElementChild;
+      text?.classList.add(`${COMPONENT_CLASS}__text rt-dark-900 headline-6`);
+    }
     return {
       source: row,
       link: linkCol?.textContent?.trim() || "",
       icon: picture,
       iconMb: picture ? picture.cloneNode(true) : null,
-      text: textCol?.innerHTML || "",
+      text: text,
     };
   });
 }
@@ -35,12 +39,8 @@ function getItemsConfig(block) {
 function renderSlide(config) {
   return html`
     <div class="swiper-slide">
-      <a class="cmp__support-tools__item" href="${config.link}">
-        ${config.icon}
-        <div
-          class="cmp__support-tools__text rt-dark-900 headline-6"
-          .innerHTML=${config.text}
-        ></div>
+      <a class="${COMPONENT_CLASS}__item" href="${config.link}">
+        ${config.icon}${config.text}
       </a>
     </div>
   `;
@@ -54,11 +54,7 @@ function renderStaticItem(config) {
   return html`
     <div>
       <a class="cmp__support-tools__item" href="${config.link}">
-        ${config.iconMb}
-        <span
-          class="cmp__support-tools__text rt-dark-800 headline-6"
-          .innerHTML=${config.text}
-        ></span>
+        ${config.iconMb}${config.text}
       </a>
     </div>
   `;
@@ -152,13 +148,6 @@ export default async function decorate(block) {
     if (!item.source || !slide) return;
 
     moveInstrumentation(item.source, slide);
-
-    // Instrument text column if it exists (col index 2)
-    const textCol = item.source.children[2];
-    const textTarget = slide.querySelector(`.${COMPONENT_CLASS}__text`);
-    if (textCol && textTarget) {
-      moveInstrumentation(textCol, textTarget);
-    }
   });
 
   initSwiper(block);
