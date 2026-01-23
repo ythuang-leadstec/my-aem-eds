@@ -21,7 +21,7 @@ function renderButtons(links, layout, position) {
     : `${COMPONENT_CLASS}__button body-1`;
 
   return html`
-    <div class="${wrapperClass} ${position}">
+    <div class="${wrapperClass} ${position}" data-inst="button-wrapper">
       ${links.map(
     (link) => html`
           <a href="${link.href}" title="${link.title}" class="${btnClass}">
@@ -99,10 +99,15 @@ export default function decorate(block) {
     { source: imageRow, selector: `.${COMPONENT_CLASS}__image-wrapper` },
     { source: titleRow, selector: `.${COMPONENT_CLASS}__title` },
     { source: descRow, selector: `.${COMPONENT_CLASS}__description` },
+    { source: btnContentRow, selector: `[data-inst="button-wrapper"]` }
   ];
 
   instrumentationMap.forEach(({ source, selector }) => {
     const target = block.querySelector(selector);
+    console.log(source);
+    
+    console.log(target);
+    
     if (source && target) {
       moveInstrumentation(source, target);
     }
