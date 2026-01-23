@@ -5,36 +5,35 @@ import { moveInstrumentation } from "../../scripts/scripts.js";
 const COMPONENT_CLASS = "cmp__support-tools";
 
 /**
- * get items config from block rows
+ * Extract configuration from block rows
  * @param {HTMLElement} block
+ * @returns {Array} List of item configurations
  */
 function getItemsConfig(block) {
-  const items = [...block.children].map((row) => {
-    const cols = [...row.children];
+  return [...block.children].map((row) => {
+    const [linkCol, iconCol, textCol] = row.children;
 
-    const imgEl = cols[1]?.querySelector("picture");
-    if (imgEl) {
-      imgEl.classList.add("cmp__support-tools__icon");
+    const picture = iconCol?.querySelector("picture");
+    if (picture) {
+      picture.classList.add(`${COMPONENT_CLASS}__icon`);
     }
+
     return {
       source: row,
-      link: cols[0]?.textContent?.trim() || "",
-      icon: imgEl, // Store the DOM element
-      iconMb: imgEl ? imgEl.cloneNode(true) : null,
-      text: cols[2]?.innerHTML || "",
+      link: linkCol?.textContent?.trim() || "",
+      icon: picture,
+      iconMb: picture ? picture.cloneNode(true) : null,
+      text: textCol?.innerHTML || "",
     };
   });
-
-  return items;
 }
 
 /**
- * set support tool pc template
+ * Template for a single slide item (Desktop/Swiper)
  * @param {object} config
- * @returns
  */
-function setSupportToolPcTemplate(config) {
-  const template = html`
+function renderSlide(config) {
+  return html`
     <div class="swiper-slide">
       <a class="cmp__support-tools__item" href="${config.link}">
         ${config.icon}
@@ -45,79 +44,51 @@ function setSupportToolPcTemplate(config) {
       </a>
     </div>
   `;
-  return template;
 }
 
 /**
- * set support tool mb template
+ * Template for a single static item (Mobile)
  * @param {object} config
- * @returns
  */
-function setSupportToolMbTemplate(config) {
+function renderStaticItem(config) {
   return html`
     <div>
       <a class="cmp__support-tools__item" href="${config.link}">
         ${config.iconMb}
-        <span class="cmp__support-tools__text rt-dark-800 headline-6" .innerHTML=${config.text}
-          ></span
-        >
+        <span
+          class="cmp__support-tools__text rt-dark-800 headline-6"
+          .innerHTML=${config.text}
+        ></span>
       </a>
     </div>
   `;
 }
-/**
- * set support tools template
- * @param {object} itemsConfig
- * @returns
- */
-function setSupportToolsTemplate(itemsConfig) {
-  return html`
-    <div class="cmp__support-tools__container">
-      <div class="component-layout">
-        <div class="cmp__support-tools__swiper">
-          <div class="swiper-container">
-            <div class="swiper-wrapper cmp__support-tools__wrapper">
-              ${itemsConfig.map((item) => setSupportToolPcTemplate(item))}
-            </div>
-          </div>
 
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-button-next"></div>
-        </div>
-
-        <!-- 只有在手机端才会显示 -->
-        <div class="cmp__support-tools__static-list static-list">
-          ${itemsConfig.map((item) => setSupportToolMbTemplate(item))}
-        </div>
-      </div>
-    </div>
-  `;
-}
 /**
- * set swiper
+ * Initialize Swiper logic
  * @param {HTMLElement} block
- * @returns
  */
-function setSwiper(block) {
+function initSwiper(block) {
   const swiperContainer = block.querySelector(".swiper-container");
-  const slides = block.querySelectorAll(".swiper-slide");
-  const slidesCount = slides.length;
+  const slideCount = block.querySelectorAll(".swiper-slide").length;
 
-  block.style.setProperty("--desktop-cols", Math.max(1, slidesCount));
+  // Set CSS variables for layout
+  block.style.setProperty("--desktop-cols", Math.max(1, slideCount));
   block.style.setProperty(
     "--mobile-cols",
-    Math.max(1, Math.min(slidesCount, 2))
+    Math.max(1, Math.min(slideCount, 2))
   );
 
-  if (slidesCount <= 4) {
-    const navButtons = block.querySelectorAll(
-      ".swiper-button-next, .swiper-button-prev"
-    );
-    navButtons.forEach((btn) => (btn.style.display = "none"));
+  // If few slides, disable navigation and enable static mode
+  if (slideCount <= 4) {
     block.classList.add("is-static-mode");
+    block.querySelectorAll(".swiper-button-next, .swiper-button-prev").forEach(
+      (btn) => (btn.style.display = "none")
+    );
     return;
   }
 
+  // Load and initialize functionality
   loadSwiper().then((Swiper) => {
     const swiper = new Swiper(swiperContainer, {
       slidesPerView: 2,
@@ -129,64 +100,66 @@ function setSwiper(block) {
       observer: true,
       observeParents: true,
       breakpoints: {
-        0: {
-          slidesPerView: 2,
-          spaceBetween: 16,
-        },
-        768: {
-          slidesPerView: 4,
-          spaceBetween: 16,
-        },
-        1024: {
-          slidesPerView: 4,
-          spaceBetween: 17.3,
-        },
-        1280: {
-          slidesPerView: 4,
-          spaceBetween: 17,
-        },
-        1440: {
-          slidesPerView: 4,
-          spaceBetween: 61,
-        },
-        1920: {
-          slidesPerView: 4,
-          spaceBetween: 140,
-        },
+        0: { slidesPerView: 2, spaceBetween: 16 },
+        768: { slidesPerView: 4, spaceBetween: 16 },
+        1024: { slidesPerView: 4, spaceBetween: 17.3 },
+        1280: { slidesPerView: 4, spaceBetween: 17 },
+        1440: { slidesPerView: 4, spaceBetween: 61 },
+        1920: { slidesPerView: 4, spaceBetween: 140 },
       },
     });
 
-    const resizeObserver = new ResizeObserver(() => {
-      swiper.update();
-    });
+    const resizeObserver = new ResizeObserver(() => swiper.update());
     resizeObserver.observe(swiperContainer);
   });
 }
 
 export default async function decorate(block) {
-  const itemsConfig = getItemsConfig(block);
-
-  const template = setSupportToolsTemplate(itemsConfig);
-  block.innerHTML = "";
+  const items = getItemsConfig(block);
   block.classList.add(COMPONENT_CLASS);
+
+  // Main Template
+  const template = html`
+    <div class="${COMPONENT_CLASS}__container">
+      <div class="component-layout">
+        <!-- Desktop Swiper View -->
+        <div class="${COMPONENT_CLASS}__swiper">
+          <div class="swiper-container">
+            <div class="swiper-wrapper ${COMPONENT_CLASS}__wrapper">
+              ${items.map(renderSlide)}
+            </div>
+          </div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
+        </div>
+
+        <!-- Mobile Static View -->
+        <div class="${COMPONENT_CLASS}__static-list static-list">
+          ${items.map(renderStaticItem)}
+        </div>
+      </div>
+    </div>
+  `;
+
+  block.innerHTML = "";
   render(template, block);
 
-  itemsConfig.forEach((item, index) => {
-    const supportToolSlide = block.querySelectorAll(
-      ".cmp__support-tools__wrapper .swiper-slide"
+  // Restore Instrumentation
+  items.forEach((item, index) => {
+    const slide = block.querySelectorAll(
+      `.${COMPONENT_CLASS}__wrapper .swiper-slide`
     )[index];
-    if (item.source && supportToolSlide) {
-      moveInstrumentation(item.source, supportToolSlide);
-      const cols = [...item.source.children];
-      if (cols[2]) {
-        const target = supportToolSlide.querySelector(
-          ".cmp__support-tools__text"
-        );
-        if (target) {
-          moveInstrumentation(cols[2], target);
-        }
-      }
+    if (!item.source || !slide) return;
+
+    moveInstrumentation(item.source, slide);
+
+    // Instrument text column if it exists (col index 2)
+    const textCol = item.source.children[2];
+    const textTarget = slide.querySelector(`.${COMPONENT_CLASS}__text`);
+    if (textCol && textTarget) {
+      moveInstrumentation(textCol, textTarget);
     }
   });
-  setSwiper(block);
+
+  initSwiper(block);
 }

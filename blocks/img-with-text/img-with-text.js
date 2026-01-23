@@ -1,106 +1,110 @@
 import { html, render } from "https://esm.sh/lit-html";
 import { moveInstrumentation } from "../../scripts/scripts.js";
 
+const COMPONENT_CLASS = "cmp__img-with-text";
+
+/**
+ * Render buttons or links based on layout configuration
+ * @param {Array} links - Array of link objects
+ * @param {string} layout - 'group' or 'normal'
+ * @param {string} position - CSS class for alignment
+ */
+function renderButtons(links, layout, position) {
+  if (!links.length) return null;
+
+  const isGroup = layout === "group";
+  const wrapperClass = isGroup
+    ? `${COMPONENT_CLASS}__text-link-group`
+    : `${COMPONENT_CLASS}__button-wrapper`;
+  const btnClass = isGroup
+    ? `${COMPONENT_CLASS}__text-link subtitle-1 is-with-arrow`
+    : `${COMPONENT_CLASS}__button body-1`;
+
+  return html`
+    <div class="${wrapperClass} ${position}">
+      ${links.map(
+    (link) => html`
+          <a href="${link.href}" title="${link.title}" class="${btnClass}">
+            ${link.text}
+          </a>
+        `
+  )}
+    </div>
+  `;
+}
+
 export default function decorate(block) {
-  // console.log(block.cloneNode(true));
-  
   if (!block.children.length) return;
 
-  const field = [...block.children].map((row) => row.firstElementChild);
+  // Destructure config rows for better readability
+  const [
+    positionRow, // 0: Image Position
+    imageRow, // 1: Image
+    titleRow, // 2: Title
+    descRow, // 3: Description
+    btnLayoutRow, // 4: Button Layout
+    btnContentRow, // 5: Button Content
+    btnPosRow, // 6: Button Position
+  ] = [...block.children].map((row) => row.firstElementChild);
 
-  const imagePositionClasses =
-      field[0]?.textContent?.trim().toLowerCase() || "",
-    alignConfig = imagePositionClasses.includes("image-right")
-      ? "image-right"
-      : "image-left",
-    picture = field[1]?.querySelector("picture"),
-    title = field[2]?.innerHTML || "",
-    description = field[3]?.innerHTML || "",
-    buttonLayout = field[4]?.textContent || "normal",
-    buttonContentContainer = field[5],
-    buttonPosition = field[6]?.textContent || "is-align-left";
+  // Configuration Parsing
+  const isReverse = positionRow?.textContent?.trim() === "image-right";
+  const buttonLayout = btnLayoutRow?.textContent?.trim() || "normal";
+  const buttonPosition = btnPosRow?.textContent?.trim() || "is-align-left";
 
-  const isReverse = alignConfig === "image-right";
-
+  // Content Extraction
+  const picture = imageRow?.querySelector("picture");
   if (picture) {
-    const img = picture.querySelector("img");
-    if (img) img.className = "cmp__img-with-text__image";
+    picture.querySelector("img")?.classList.add(`${COMPONENT_CLASS}__image`);
   }
 
-  const links = buttonContentContainer
-    ? [...buttonContentContainer.querySelectorAll("a")].map((a) => ({
-        href: a.href,
-        text: a.textContent,
-        title: a.title,
-      }))
+  const title = titleRow?.innerHTML || "";
+  const description = descRow?.innerHTML || "";
+
+  const links = btnContentRow
+    ? [...btnContentRow.querySelectorAll("a")].map((a) => ({
+      href: a.href,
+      text: a.textContent,
+      title: a.title,
+    }))
     : [];
 
   const template = html`
-    <div class="cmp__img-with-text__container component-layout">
-      <div class="cmp__img-with-text__image-wrapper">${picture}</div>
-      <div class="cmp__img-with-text__content">
+    <div class="${COMPONENT_CLASS}__container component-layout">
+      <div class="${COMPONENT_CLASS}__image-wrapper">${picture}</div>
+      <div class="${COMPONENT_CLASS}__content">
         <div
-          class="cmp__img-with-text__title headline-4"
+          class="${COMPONENT_CLASS}__title headline-4"
           .innerHTML=${title}
         ></div>
         <p
-          class="cmp__img-with-text__description rt-dark-800 body-1"
+          class="${COMPONENT_CLASS}__description rt-dark-800 body-1"
           .innerHTML=${description}
         ></p>
-
-        ${buttonLayout === "group"
-          ? html` <div
-              class="cmp__img-with-text__text-link-group ${buttonPosition}"
-            >
-              ${links.map(
-                (link) => html`
-                  <a
-                    href="${link.href}"
-                    title="${link.title}"
-                    class="cmp__img-with-text__text-link subtitle-1 is-with-arrow"
-                    >${link.text}</a
-                  >
-                `
-              )}
-            </div>`
-          : html` <div
-              class="cmp__img-with-text__button-wrapper ${buttonPosition}"
-            >
-              ${links.map(
-                (link) => html`
-                  <a
-                    href="${link.href}"
-                    title="${link.title}"
-                    class="cmp__img-with-text__button body-1"
-                    >${link.text}</a
-                  >
-                `
-              )}
-            </div>`}
+        ${renderButtons(links, buttonLayout, buttonPosition)}
       </div>
     </div>
   `;
-  block.classList.add("cmp__img-with-text");
+
+  block.classList.add(COMPONENT_CLASS);
   if (isReverse) {
-    block.classList.add("cmp__img-with-text--reverse");
+    block.classList.add(`${COMPONENT_CLASS}--reverse`);
   }
 
   block.innerHTML = "";
   render(template, block);
 
-  // Restore Instrumentation for Inline Editing using a mapping array
+  // Restore Instrumentation
   const instrumentationMap = [
-    { index: 1, selector: ".cmp__img-with-text__image-wrapper" },
-    { index: 2, selector: ".cmp__img-with-text__title" },
-    { index: 3, selector: ".cmp__img-with-text__description" },
+    { source: imageRow, selector: `.${COMPONENT_CLASS}__image-wrapper` },
+    { source: titleRow, selector: `.${COMPONENT_CLASS}__title` },
+    { source: descRow, selector: `.${COMPONENT_CLASS}__description` },
   ];
 
-  instrumentationMap.forEach(({ index, selector }) => {
-    const source = field[index];
+  instrumentationMap.forEach(({ source, selector }) => {
     const target = block.querySelector(selector);
     if (source && target) {
       moveInstrumentation(source, target);
     }
   });
 }
-
