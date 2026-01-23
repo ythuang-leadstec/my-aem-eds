@@ -1,4 +1,5 @@
 import { html, render } from "https://esm.sh/lit-html";
+import { unsafeHTML } from "https://esm.sh/lit-html/directives/unsafe-html.js";
 import { moveInstrumentation } from "../../scripts/scripts.js";
 
 const COMPONENT_CLASS = "cmp__img-with-text";
@@ -58,8 +59,8 @@ export default function decorate(block) {
     picture.querySelector("img")?.classList.add(`${COMPONENT_CLASS}__image`);
   }
 
-  const title = titleRow?.innerHTML || "";
-  const description = descRow?.innerHTML || "";
+  const title = titleRow?.querySelector("p")?.textContent?.trim() || "";
+  const description = descRow?.querySelector("p")?.textContent?.trim() || "";
 
   const links = btnContentRow
     ? [...btnContentRow.querySelectorAll("a")].map((a) => ({
@@ -75,12 +76,10 @@ export default function decorate(block) {
       <div class="${COMPONENT_CLASS}__content">
         <div
           class="${COMPONENT_CLASS}__title headline-4"
-          .innerHTML=${title}
-        ></div>
+        >${unsafeHTML(title)}</div>
         <p
           class="${COMPONENT_CLASS}__description rt-dark-800 body-1"
-          .innerHTML=${description}
-        ></p>
+        >${unsafeHTML(description)}</p>
         ${renderButtons(links, buttonLayout, buttonPosition)}
       </div>
     </div>
@@ -96,7 +95,6 @@ export default function decorate(block) {
 
   // Restore Instrumentation
   const instrumentationMap = [
-    { source: imageRow, selector: `.${COMPONENT_CLASS}__image-wrapper` },
     { source: titleRow, selector: `.${COMPONENT_CLASS}__title` },
     { source: descRow, selector: `.${COMPONENT_CLASS}__description` },
     { source: btnContentRow, selector: `[data-inst="button-wrapper"]` }
@@ -104,12 +102,8 @@ export default function decorate(block) {
 
   instrumentationMap.forEach(({ source, selector }) => {
     const target = block.querySelector(selector);
-    console.log(source);
-    
-    console.log(target);
-    
     if (source && target) {
-      moveInstrumentation(source, target);
+      moveInstrumentation(source.firstElementChild || source, target);
     }
   });
 }
