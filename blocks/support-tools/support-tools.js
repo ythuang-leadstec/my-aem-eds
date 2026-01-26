@@ -18,43 +18,30 @@ function getItemsConfig(block) {
       picture.classList.add(`${COMPONENT_CLASS}__icon`);
     }
     let text = null;
-    if(textCol) {
+    if (textCol) {
       text = textCol.firstElementChild;
-      text?.classList.add(`${COMPONENT_CLASS}__text rt-dark-900 headline-6`);
+      if (text) {
+        text.classList.add(`${COMPONENT_CLASS}__text`, "rt-dark-900", "headline-6");
+      }
     }
     return {
       source: row,
       link: linkCol?.textContent?.trim() || "",
       icon: picture,
-      iconMb: picture ? picture.cloneNode(true) : null,
       text: text,
     };
   });
 }
 
 /**
- * Template for a single slide item (Desktop/Swiper)
+ * Template for a single slide item
  * @param {object} config
  */
-function renderSlide(config) {
+function renderItem(config) {
   return html`
     <div class="swiper-slide">
       <a class="${COMPONENT_CLASS}__item" href="${config.link}">
         ${config.icon}${config.text}
-      </a>
-    </div>
-  `;
-}
-
-/**
- * Template for a single static item (Mobile)
- * @param {object} config
- */
-function renderStaticItem(config) {
-  return html`
-    <div>
-      <a class="cmp__support-tools__item" href="${config.link}">
-        ${config.iconMb}${config.text}
       </a>
     </div>
   `;
@@ -75,7 +62,7 @@ function initSwiper(block) {
     Math.max(1, Math.min(slideCount, 2))
   );
 
-  // If few slides, disable navigation and enable static mode
+  // If few slides, always static mode
   if (slideCount <= 4) {
     block.classList.add("is-static-mode");
     block.querySelectorAll(".swiper-button-next, .swiper-button-prev").forEach(
@@ -84,30 +71,53 @@ function initSwiper(block) {
     return;
   }
 
-  // Load and initialize functionality
-  loadSwiper().then((Swiper) => {
-    const swiper = new Swiper(swiperContainer, {
-      slidesPerView: 2,
-      centeredSlides: false,
-      navigation: {
-        nextEl: block.querySelector(".swiper-button-next"),
-        prevEl: block.querySelector(".swiper-button-prev"),
-      },
-      observer: true,
-      observeParents: true,
-      breakpoints: {
-        0: { slidesPerView: 2, spaceBetween: 16 },
-        768: { slidesPerView: 4, spaceBetween: 16 },
-        1024: { slidesPerView: 4, spaceBetween: 17.3 },
-        1280: { slidesPerView: 4, spaceBetween: 17 },
-        1440: { slidesPerView: 4, spaceBetween: 61 },
-        1920: { slidesPerView: 4, spaceBetween: 140 },
-      },
-    });
+  let swiperInstance = null;
 
-    const resizeObserver = new ResizeObserver(() => swiper.update());
-    resizeObserver.observe(swiperContainer);
+  const handleSwiperState = async () => {
+    const isMobile = window.innerWidth < 768; // Tablet breakpoint
+
+    if (isMobile) {
+      if (swiperInstance) {
+        swiperInstance.destroy(true, true);
+        swiperInstance = null;
+      }
+      return;
+    }
+
+    if (!swiperInstance) {
+      loadSwiper().then((Swiper) => {
+        // Re-check just in case state changed during async import
+        if (window.innerWidth < 768) return;
+
+        swiperInstance = new Swiper(swiperContainer, {
+          slidesPerView: 4,
+          spaceBetween: 16,
+          navigation: {
+            nextEl: block.querySelector(".swiper-button-next"),
+            prevEl: block.querySelector(".swiper-button-prev"),
+          },
+          breakpoints: {
+            768: { slidesPerView: 4, spaceBetween: 16 },
+            1024: { slidesPerView: 4, spaceBetween: 17.3 },
+            1280: { slidesPerView: 4, spaceBetween: 17 },
+            1440: { slidesPerView: 4, spaceBetween: 61 },
+            1920: { slidesPerView: 4, spaceBetween: 140 },
+          },
+        });
+      });
+    } else {
+      swiperInstance.update();
+    }
+  };
+
+  // Initial Check
+  handleSwiperState();
+
+  // Watch for breakpoint changes
+  const resizeObserver = new ResizeObserver(() => {
+    handleSwiperState();
   });
+  resizeObserver.observe(document.body);
 }
 
 export default async function decorate(block) {
@@ -118,20 +128,14 @@ export default async function decorate(block) {
   const template = html`
     <div class="${COMPONENT_CLASS}__container">
       <div class="component-layout">
-        <!-- Desktop Swiper View -->
         <div class="${COMPONENT_CLASS}__swiper">
           <div class="swiper-container">
             <div class="swiper-wrapper ${COMPONENT_CLASS}__wrapper">
-              ${items.map(renderSlide)}
+              ${items.map(renderItem)}
             </div>
           </div>
           <div class="swiper-button-prev"></div>
           <div class="swiper-button-next"></div>
-        </div>
-
-        <!-- Mobile Static View -->
-        <div class="${COMPONENT_CLASS}__static-list static-list">
-          ${items.map(renderStaticItem)}
         </div>
       </div>
     </div>
